@@ -4,391 +4,276 @@
 
 @section('content')
 
-
-
 {{-- =========================================================
     HERO PRODUK & LAYANAN
-    BACKGROUND DISESUAIKAN DENGAN BERANDA DAN TENTANG KAMI
-========================================================== --}}
+    MOBILE: FOTO DI ATAS TEKS
+    DESKTOP: FOTO DI SISI KANAN
+========================================================= --}}
 
 <section class="relative isolate overflow-hidden bg-[#EAF4FF]">
 
-    {{-- BACKGROUND FOTO DI SEBELAH KANAN UNTUK DESKTOP --}}
+    {{-- FOTO HERO DESKTOP --}}
     <div
-        class="pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] lg:block"
-        aria-hidden="true">
-
+        class="pointer-events-none absolute inset-y-0 right-0 hidden w-[55%] lg:block"
+        aria-hidden="true"
+    >
         <img
-            src="{{ asset('images/heroproduklayanan.jpg') }}"
+            src="{{ $hero?->image ? asset('storage/' . $hero->image) : asset('images/heroproduklayanan.jpg') }}"
             alt=""
-            class="h-full w-full object-cover object-center">
+            class="h-full w-full object-cover object-center"
+        >
 
-        {{-- GRADASI KIRI MENYATU DENGAN BACKGROUND --}}
-        <div class="absolute inset-y-0 left-0 w-[60%] bg-gradient-to-r from-[#EAF4FF] via-[#EAF4FF]/75 to-transparent"></div>
+        <div class="absolute inset-y-0 left-0 w-[48%] bg-gradient-to-r from-[#EAF4FF] via-[#EAF4FF]/75 to-transparent"></div>
 
-        {{-- GRADASI BAWAH --}}
-        <div class="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#EAF4FF]/80 to-transparent"></div>
-
+        <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#EAF4FF]/30 to-transparent"></div>
     </div>
 
-    {{-- BACKGROUND FOTO UNTUK MOBILE --}}
-    <div class="relative h-[220px] w-full sm:h-[280px] lg:hidden">
-
+    {{-- FOTO HERO MOBILE --}}
+    <div class="relative w-full lg:hidden">
         <img
-            src="{{ asset('images/hero_produk_layanan.jpg') }}"
+            src="{{ $hero?->image ? asset('storage/' . $hero->image) : asset('images/heroproduklayanan.jpg') }}"
             alt="Produk dan layanan CV Arindah"
-            class="h-full w-full object-cover object-center">
+            fetchpriority="high"
+            class="h-[220px] w-full object-cover object-center sm:h-[300px]"
+        >
 
-        <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#EAF4FF] to-transparent"></div>
-
+        <div class="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#EAF4FF]/60 to-transparent"></div>
     </div>
 
-    {{-- KONTEN HERO --}}
-    <div class="relative z-10 mx-auto max-w-[1440px] px-8 sm:px-10 lg:px-[32px]">
+    {{-- TEKS HERO --}}
+    <div class="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-10 lg:px-8">
+        <div class="flex items-center py-7 sm:py-10 lg:min-h-[400px] lg:py-8">
 
-        <div class="flex items-center pb-12 pt-10 sm:pt-12 lg:min-h-[440px] lg:py-20">
-
-            {{-- KONTEN KIRI --}}
-            <div class="max-w-[500px]">
+            <div class="w-full max-w-[440px]">
 
                 {{-- LABEL --}}
-                <p class="text-sm font-bold uppercase leading-6 tracking-wide text-[#0969D8]">
-                    PRODUK & LAYANAN
+                <p class="text-xs font-bold uppercase leading-6 tracking-wider text-[#0969D8] sm:text-sm">
+                    {{ $hero?->label ?? 'PRODUK & LAYANAN' }}
                 </p>
 
+                {{-- LOGIKA WARNA JUDUL --}}
+                @php
+                    $heroTitle = $hero?->title
+                        ?? 'Solusi untuk Mendukung Berbagai Kebutuhan Anda';
+
+                    $highlightWord = 'Berbagai';
+
+                    $heroTitleMain = $heroTitle;
+                    $heroTitleHighlight = '';
+
+                    $position = stripos($heroTitle, $highlightWord);
+
+                    if ($position !== false) {
+                        $heroTitleMain = trim(
+                            substr($heroTitle, 0, $position)
+                        );
+
+                        $heroTitleHighlight = trim(
+                            substr($heroTitle, $position)
+                        );
+                    }
+                @endphp
+
                 {{-- JUDUL --}}
-                <h1 class="mt-3 max-w-[460px] text-4xl font-bold leading-[1.12] tracking-tight text-[#123B68] sm:text-5xl lg:text-[46px] xl:text-[52px]">
-                    Solusi untuk Mendukung
-                    <span class="block text-[#0969D8]">
-                        Berbagai Kebutuhan
-                    </span>
-                    Anda
+                <h1 class="mt-2 max-w-[440px] text-[29px] font-bold leading-[1.15] tracking-tight text-[#123B68] sm:mt-3 sm:text-[38px] lg:text-[42px] xl:text-[44px]">
+                    {{ $heroTitleMain }}
+
+                    @if ($heroTitleHighlight !== '')
+                        <span class="text-[#0969D8]">
+                            {{ $heroTitleHighlight }}
+                        </span>
+                    @endif
                 </h1>
 
                 {{-- DESKRIPSI --}}
-                <p class="mt-5 max-w-[430px] text-sm leading-6 text-[#64748B] md:text-base md:leading-7">
-                    CV Arindah menyediakan layanan yang mendukung
-                    kebutuhan pelanggan dalam memperoleh berbagai
-                    produk dan perlengkapan secara praktis, cepat,
-                    dan terpercaya.
+                <p class="mt-4 max-w-[420px] text-sm leading-6 text-[#64748B] sm:mt-5 sm:text-base sm:leading-7">
+                    {{ $hero?->description ?? 'CV Arindah menyediakan layanan yang mendukung kebutuhan pelanggan dalam memperoleh berbagai produk dan perlengkapan secara praktis, cepat, dan terpercaya.' }}
                 </p>
 
-                {{-- BUTTON --}}
-                <div class="mt-8">
+                {{-- TOMBOL --}}
+                <div class="mt-5 sm:mt-6">
                     <a
-                        href="#produk"
-                        class="inline-flex items-center rounded-lg bg-[#0969D8] px-5 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:-translate-y-1 hover:bg-[#075BBF] focus:outline-none focus:ring-4 focus:ring-blue-200">
-                        Lihat Produk
+                        href="{{ $hero?->button_link ?? '#produk' }}"
+                        class="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#0969D8] px-5 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:-translate-y-1 hover:bg-[#075BBF] focus:outline-none focus:ring-4 focus:ring-blue-200"
+                    >
+                        {{ $hero?->button_text ?? 'Lihat Produk' }}
                     </a>
                 </div>
 
             </div>
-
         </div>
-
     </div>
 
 </section>
 
+
+
+    {{-- =========================================================
+        KATEGORI PRODUK
+    ========================================================= --}}
+    <section id="produk" class="bg-white py-12 sm:py-16 lg:py-20">
+
+        <div class="mx-auto max-w-[1296px] px-5 sm:px-8 lg:px-8">
+
+            {{-- JUDUL PRODUK --}}
+            <div class="mb-8 sm:mb-9">
+
+                <p class="text-[13px] font-bold tracking-wide text-[#0969D8] sm:text-[14px]">
+                    PRODUK
+                </p>
+
+                <h2 class="mt-3 text-[25px] font-bold leading-tight text-[#123B68] sm:text-[30px] lg:text-[32px]">
+                    Mendukung Kebutuhan Anda dengan Solusi yang Tepat
+                </h2>
+
+                <p class="mt-3 max-w-[700px] text-sm leading-6 text-[#64748B] sm:text-[14px]">
+                    Setiap kebutuhan memiliki karakteristik yang berbeda.
+                    CV Arindah menyediakan berbagai pilihan produk
+                    yang dapat membantu pelanggan dalam mendapatkan
+                    produk dan perlengkapan yang sesuai dengan kebutuhan.
+                </p>
+
+            </div>
+
+
+           
 
 
 
 {{-- =========================================================
-    KATEGORI PRODUK
-========================================================== --}}
-<section
-    id="produk"  
-    class="bg-white py-16 lg:py-20"
->
+    GRID KATEGORI PRODUK
+========================================================= --}}
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
 
-    <div class="mx-auto max-w-[1296px] px-6 lg:px-8">
+    @forelse ($categories as $category)
+        @php
+            $categoryRoutes = [
+                'komputer-teknologi' => 'produk.komputer',
+                'elektronik-furniture' => 'produk.elektronik',
+                'perlengkapan-kantor' => 'produk.perlengkapan_kantor',
+                'audio-video' => 'produk.audio_video',
+                'laboratorium-kesehatan' => 'produk.laboratorium_kesehatan',
+                'kebutuhan-sehari-hari' => 'produk.kebutuhan_sehari_hari',
+            ];
 
+            $imageUrl = null;
 
-        {{-- HEADER --}}
-        <div class="mb-9">
+            if ($category->image) {
+                $imageUrl = \Illuminate\Support\Str::startsWith(
+                    $category->image,
+                    ['images/', 'storage/']
+                )
+                    ? asset($category->image)
+                    : asset('storage/' . $category->image);
+            }
 
-            <p class="text-[14px] font-bold tracking-wide text-[#0969D8]">
-                PRODUK
-            </p>
+            $detailRoute = $categoryRoutes[$category->slug ?? ''] ?? null;
+        @endphp
 
+        <div class="arindah-animate arindah-product-card flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-[0_3px_12px_rgba(15,23,42,0.10)]">
 
-            <h2 class="mt-3 text-[30px] font-bold leading-tight text-[#123B68] lg:text-[32px]">
-                Mendukung Kebutuhan Anda dengan Solusi yang Tepat
-            </h2>
+            {{-- GAMBAR --}}
+            @if ($imageUrl)
+                <img
+                    src="{{ $imageUrl }}"
+                    alt="{{ $category->name }}"
+                    loading="lazy"
+                    class="h-[200px] w-full shrink-0 object-cover sm:h-[190px] lg:h-[180px]"
+                >
+            @else
+                <div class="flex h-[200px] w-full shrink-0 items-center justify-center bg-slate-100 sm:h-[190px] lg:h-[180px]">
+                    <div class="text-center text-slate-400">
+                        <i class="bi bi-image text-3xl"></i>
+                        <p class="mt-2 text-xs">Gambar belum tersedia</p>
+                    </div>
+                </div>
+            @endif
 
+            {{-- KONTEN KARTU --}}
+            <div class="flex flex-1 flex-col p-4 sm:p-5">
 
-            <p class="mt-2 max-w-[700px] text-[14px] leading-6 text-[#64748B]">
-                Setiap kebutuhan memiliki karakteristik yang berbeda.
-                CV Arindah menyediakan berbagai pilihan produk
-                yang dapat membantu pelanggan dalam mendapatkan
-                produk dan perlengkapan yang sesuai dengan kebutuhan.
-            </p>
+                <h3 class="text-sm font-bold text-[#123B68] sm:text-[15px]">
+                    {{ $category->name }}
+                </h3>
 
+                <p class="mt-2 text-xs leading-5 text-[#64748B] sm:text-[13px]">
+                    {{ $category->description }}
+                </p>
+
+                {{-- TOMBOL DETAIL --}}
+                <div class="mt-auto pt-4">
+                    @if ($detailRoute)
+                        <a
+                            href="{{ route($detailRoute) }}"
+                            class="inline-flex items-center gap-1 text-[13px] font-semibold text-[#0969D8] transition hover:gap-2"
+                        >
+                            Lihat Selengkapnya <span>→</span>
+                        </a>
+                    @else
+                        <span class="inline-flex items-center gap-1 text-[13px] font-semibold text-[#0969D8]">
+                            Lihat Selengkapnya <span>→</span>
+                        </span>
+                    @endif
+                </div>
+
+            </div>
         </div>
 
-
-
-        {{-- PRODUCT CARDS --}}
-        <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-
-
-            {{-- CARD 1 --}}
-            <div class="overflow-hidden rounded-[12px] bg-white shadow-[0_3px_12px_rgba(15,23,42,0.10)]">
-
-                <img
-                    src="/images/komputer_teknologi.jpg"
-                    alt="Komputer & Teknologi"
-                    class="h-[170px] w-full object-cover"
-                >
-
-                <div class="p-4">
-
-                    <h3 class="text-[13px] font-bold text-[#123B68]">
-                        Komputer & Teknologi
-                    </h3>
-
-                    <p class="mt-2 text-[11px] leading-[1.5] text-[#64748B]">
-                        Komputer, laptop, printer, aksesori,
-                        dan perlengkapan teknologi lainnya.
-                    </p>
-
-                    <a
-                        href="{{ route('produk.komputer') }}"
-                        class="mt-4 inline-flex items-center text-[13px] font-semibold text-[#0969D8] transition hover:gap-2"
-                    >
-                        Lihat Selengkapnya
-                        <span class="ml-1">→</span>
-                    </a>
-
-                </div>
-
-            </div>
-
-
-
-            {{-- CARD 2 --}}
-            <div class="overflow-hidden rounded-[12px] bg-white shadow-[0_3px_12px_rgba(15,23,42,0.10)]">
-
-                <img
-                    src="/images/furnitur.jpg"
-                    alt="Elektronik & Furniture"
-                    class="h-[170px] w-full object-cover"
-                >
-
-                <div class="p-4">
-
-                    <h3 class="text-[13px] font-bold text-[#123B68]">
-                        Elektronik & Furniture
-                    </h3>
-
-                    <p class="mt-2 text-[11px] leading-[1.5] text-[#64748B]">
-                        Peralatan listrik rumah tangga,
-                        penerangan, elektronik, dan furniture.
-                    </p>
-
-                    <a
-                        href="{{ route('produk.elektronik') }}"
-                        class="mt-4 inline-flex items-center text-[13px] font-semibold text-[#0969D8] transition hover:gap-2"
-                    >
-                        Lihat Selengkapnya
-                        <span class="ml-1">→</span>
-                    </a>
-
-                </div>
-
-            </div>
-
-
-
-            {{-- CARD 3 --}}
-            <div class="overflow-hidden rounded-[12px] bg-white shadow-[0_3px_12px_rgba(15,23,42,0.10)]">
-
-                <img
-                    src="/images/perlengkapan_kantor.jpg"
-                    alt="Perlengkapan Kantor"
-                    class="h-[170px] w-full object-cover"
-                >
-
-                <div class="p-4">
-
-                    <h3 class="text-[13px] font-bold text-[#123B68]">
-                        Perlengkapan Kantor
-                    </h3>
-
-                    <p class="mt-2 text-[11px] leading-[1.5] text-[#64748B]">
-                        Alat tulis, perlengkapan kantor,
-                        serta kebutuhan perlengkapan lainnya.
-                    </p>
-
-                    <a
-                        href="{{ route('produk.perlengkapan_kantor') }}"
-                        class="mt-4 inline-flex items-center text-[13px] font-semibold text-[#0969D8] transition hover:gap-2"
-                    >
-                        Lihat Selengkapnya
-                        <span class="ml-1">→</span>
-                    </a>
-
-                </div>
-
-            </div>
-
-
-
-            {{-- CARD 4 --}}
-            <div class="overflow-hidden rounded-[12px] bg-white shadow-[0_3px_12px_rgba(15,23,42,0.10)]">
-
-                <img
-                    src="/images/kamera_audio.jpg"
-                    alt="Audio & Video"
-                    class="h-[170px] w-full object-cover"
-                >
-
-                <div class="p-4">
-
-                    <h3 class="text-[13px] font-bold text-[#123B68]">
-                        Audio & Video
-                    </h3>
-
-                    <p class="mt-2 text-[11px] leading-[1.5] text-[#64748B]">
-                        Peralatan audio, video, dan perlengkapannya
-                        untuk kebutuhan pribadi maupun profesional.
-                    </p>
-
-                     <a
-                        href="{{ route('produk.audio_video') }}"
-                        class="mt-4 inline-flex items-center text-[13px] font-semibold text-[#0969D8] transition hover:gap-2"
-                    >
-                        Lihat Selengkapnya
-                        <span class="ml-1">→</span>
-                    </a>
-
-                </div>
-
-            </div>
-
-
-
-            {{-- CARD 5 --}}
-            <div class="overflow-hidden rounded-[12px] bg-white shadow-[0_3px_12px_rgba(15,23,42,0.10)]">
-
-                <img
-                    src="/images/laboratorium_kesehatan.jpg"
-                    alt="Laboratorium & Kesehatan"
-                    class="h-[170px] w-full object-cover"
-                >
-
-                <div class="p-4">
-
-                    <h3 class="text-[13px] font-bold text-[#123B68]">
-                        Laboratorium & Kesehatan
-                    </h3>
-
-                    <p class="mt-2 text-[11px] leading-[1.5] text-[#64748B]">
-                        Peralatan laboratorium, farmasi,
-                        dan alat kesehatan.
-                    </p>
-
-                    <a
-                        href="{{ route('produk.laboratorium_kesehatan') }}"
-                        class="mt-4 inline-flex items-center text-[13px] font-semibold text-[#0969D8] transition hover:gap-2"
-                    >
-                        Lihat Selengkapnya
-                        <span class="ml-1">→</span>
-                    </a>
-
-                </div>
-
-            </div>
-
-
-
-            {{-- CARD 6 --}}
-            <div class="overflow-hidden rounded-[12px] bg-white shadow-[0_3px_12px_rgba(15,23,42,0.10)]">
-
-                <img
-                    src="/images/kebutuhan sehari-hari.jpg"
-                    alt="Kebutuhan Sehari-hari"
-                    class="h-[170px] w-full object-cover"
-                >
-
-                <div class="p-4">
-
-                    <h3 class="text-[13px] font-bold text-[#123B68]">
-                        Kebutuhan Sehari-hari
-                    </h3>
-
-                    <p class="mt-2 text-[11px] leading-[1.5] text-[#64748B]">
-                        Makanan, minuman, pakaian, kosmetik,
-                        parfum, dan kebutuhan lainnya.
-                    </p>
-
-                    <a
-                        href="{{ route('produk.kebutuhan_sehari_hari') }}"
-                        class="mt-4 inline-flex items-center text-[13px] font-semibold text-[#0969D8] transition hover:gap-2"
-                    >
-                        Lihat Selengkapnya
-                        <span class="ml-1">→</span>
-                    </a>
-
-                </div>
-
-            </div>
-
-
+    @empty
+        <div class="col-span-full rounded-xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
+            <h3 class="font-semibold text-[#123B68]">
+                Belum ada kategori produk.
+            </h3>
+            <p class="mt-2 text-sm text-slate-500">
+                Silakan tambahkan kategori melalui CMS Produk &amp; Layanan.
+            </p>
         </div>
+    @endforelse
 
-    </div>
+</div>
 
+</div>
 </section>
+
 
 
 
 {{-- =========================================================
     LAYANAN KAMI
-========================================================== --}}
-<section
-    id="layanan"
-    class="bg-[#EEF7FF] py-16 lg:py-20"
->
+========================================================= --}}
+<section id="layanan" class="overflow-hidden bg-[#EEF7FF] py-12 sm:py-16 lg:py-20">
 
-    <div class="mx-auto max-w-[1296px] px-6 lg:px-8">
+    <div class="mx-auto max-w-[1296px] px-5 sm:px-8 lg:px-8">
 
+        <div class="grid gap-8 lg:grid-cols-[1fr_0.95fr] lg:items-center lg:gap-12">
 
-        <div class="grid gap-12 lg:grid-cols-[1fr_0.95fr] lg:items-center">
-
-
-            {{-- =================================================
-                KIRI
-            ================================================== --}}
+            {{-- BAGIAN KIRI --}}
             <div>
 
-                <p class="text-[14px] font-bold tracking-wide text-[#0969D8]">
-                    LAYANAN KAMI
+                <p class="text-[13px] font-bold tracking-wide text-[#0969D8] sm:text-[14px]">
+                    {{ $layanan?->label ?? 'LAYANAN KAMI' }}
                 </p>
 
-
-                <h2 class="mt-3 max-w-[600px] text-[30px] font-bold leading-[1.15] text-[#123B68]">
-                    Teknologi Informasi & Jasa Komputer
+                <h2 class="mt-3 max-w-[600px] text-[26px] font-bold leading-tight text-[#123B68] sm:text-[30px]">
+                    {{ $layanan?->title ?? 'Teknologi Informasi & Jasa Komputer' }}
                 </h2>
 
-
-                <p class="mt-3 max-w-[570px] text-[14px] leading-[1.5] text-[#64748B]">
-                    CV Arindah menyediakan layanan di bidang teknologi informasi
+                <p class="mt-3 max-w-[570px] text-sm leading-6 text-[#64748B] sm:text-[14px] sm:leading-7">
+                    {{ $layanan?->description ?? 'CV Arindah menyediakan layanan di bidang teknologi informasi
                     dan jasa komputer untuk mendukung kebutuhan teknologi dan
-                    operasional pelanggan.
+                    operasional pelanggan.' }}
                 </p>
 
-
                 {{-- FOTO LAYANAN --}}
-                <div class="relative mt-8 max-w-[570px]">
+                <div class="relative mt-6 sm:mt-8">
 
-                    <div class="absolute -bottom-5 right-[-25px] h-[150px] w-[270px] rounded-[16px] bg-[#EEF7FF]">
-                    </div>
+                    <div class="absolute -bottom-3 right-[-10px] h-[100px] w-[60%] rounded-2xl bg-[#DCEBFF] sm:-bottom-5 sm:right-[-25px] sm:h-[150px] sm:w-[270px]"></div>
 
                     <img
-                        src="/images/layanan_kami.avif"
-                        alt="Layanan teknologi informasi CV Arindah"
-                        class="relative z-10 h-[285px] w-full rounded-[12px] object-cover shadow-sm"
+                        src="{{ $layanan?->image ? asset('storage/' . $layanan->image) : asset('images/layanan_kami.avif') }}"
+                        alt="{{ $layanan?->title ?? 'Layanan teknologi informasi CV Arindah' }}"
+                        loading="lazy"
+                        class="arindah-animate arindah-service-image relative z-10 h-[230px] w-full rounded-xl object-cover shadow-sm sm:h-[285px]"
                     >
 
                 </div>
@@ -396,208 +281,328 @@
             </div>
 
 
+            
 
-            {{-- =================================================
-                KANAN — SERVICE CARDS
-            ================================================== --}}
-            <div class="space-y-4">
+{{-- KARTU LAYANAN DINAMIS --}}
+<div class="space-y-4">
 
+    @forelse ($layananItems as $item)
 
-                {{-- SERVICE 1 --}}
-                <div class="flex min-h-[92px] items-center gap-5 rounded-[12px] bg-white px-6 py-4 shadow-[0_4px_16px_rgba(15,23,42,0.10)]">
+        <div class="arindah-animate arindah-service-card flex min-h-[92px] items-center gap-4 rounded-xl bg-white px-4 py-5 shadow-[0_4px_16px_rgba(15,23,42,0.10)] sm:gap-5 sm:px-6">
 
-                    <div class="flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-[9px] border border-[#C9DCFF] bg-[#F6FAFF]">
+            {{-- IKON LAYANAN --}}
+            <div class="flex h-[50px] w-[50px] shrink-0 items-center justify-center rounded-lg border border-[#C9DCFF] bg-[#F6FAFF] sm:h-[54px] sm:w-[54px]">
 
+                @switch($item->icon)
+
+                    {{-- IKON MONITOR ASLI --}}
+                    @case('monitor')
                         <svg
-                            class="h-[24px] w-[24px] text-[#0969D8]"
+                            class="h-6 w-6 text-[#0969D8]"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             stroke-width="1.8"
                             stroke-linecap="round"
                             stroke-linejoin="round"
+                            aria-hidden="true"
                         >
                             <rect x="3" y="4" width="18" height="13" rx="1.5"/>
                             <path d="M8 21h8"/>
                             <path d="M12 17v4"/>
                         </svg>
+                    @break
 
-                    </div>
-
-
-                    <h3 class="text-[16px] font-medium leading-[1.2] text-[#123B68]">
-                        Pengadaan Perangkat<br>
-                        Komputer & Jaringan
-                    </h3>
-
-                </div>
-
-
-
-                {{-- =================================================
-                    SERVICE 2 — ICON GEAR
-                    DIBUAT ULANG SUPAYA TENGAH DAN PROPORSIONAL
-                ================================================== --}}
-                <div class="flex min-h-[92px] items-center gap-5 rounded-[12px] bg-white px-6 py-4 shadow-[0_4px_16px_rgba(15,23,42,0.10)]">
-
-
-                    {{-- ICON BOX --}}
-                    <div class="flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-[9px] border border-[#C9DCFF] bg-[#F6FAFF]">
-
-
+                    {{-- IKON RODA GIGI ASLI --}}
+                    @case('laptop')
+                    @case('settings')
                         <svg
-                            class="h-[25px] w-[25px] text-[#0969D8]"
+                            class="h-6 w-6 text-[#0969D8]"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             stroke-width="1.7"
                             stroke-linecap="round"
                             stroke-linejoin="round"
+                            aria-hidden="true"
                         >
-
-                            {{-- GEAR --}}
-                            <path
-                                d="M9.7 3.6h4.6l.5 2.1c.4.2.8.4 1.2.7l2-.9 2.3 2.3-.9 2c.3.4.5.8.7 1.2l2.1.5v4.6l-2.1.5c-.2.4-.4.8-.7 1.2l.9 2-2.3 2.3-2-.9c-.4.3-.8.5-1.2.7l-.5 2.1H9.7l-.5-2.1c-.4-.2-.8-.4-1.2-.7l-2 .9-2.3-2.3.9-2c-.3-.4-.5-.8-.7-1.2l-2.1-.5v-4.6l2.1-.5c.2-.4.4-.8.7-1.2l-.9-2L6 5.5l2 .9c.4-.3.8-.5 1.2-.7l.5-2.1Z"
-                            />
-
-                            {{-- TENGAH GEAR --}}
-                            <circle
-                                cx="12"
-                                cy="13.8"
-                                r="3"
-                            />
-
+                            <path d="M9.7 3.6h4.6l.5 2.1c.4.2.8.4 1.2.7l2-.9 2.3 2.3-.9 2c.3.4.5.8.7 1.2l2.1.5v4.6l-2.1.5c-.2.4-.4.8-.7 1.2l.9 2-2.3 2.3-2-.9c-.4.3-.8.5-1.2.7l-.5 2.1H9.7l-.5-2.1c-.4-.2-.8-.4-1.2-.7l-2 .9-2.3-2.3.9-2c-.3-.4-.5-.8-.7-1.2l-2.1-.5v-4.6l2.1-.5c.2-.4.4-.8.7-1.2l-.9-2L6 5.5l2 .9c.4-.3.8-.5 1.2-.7l.5-2.1Z"/>
+                            <circle cx="12" cy="13.8" r="3"/>
                         </svg>
+                    @break
 
-
-                    </div>
-
-
-                    <h3 class="text-[16px] font-medium text-[#123B68]">
-                        Kebutuhan Teknologi
-                    </h3>
-
-
-                </div>
-
-
-
-                {{-- SERVICE 3 --}}
-                <div class="flex min-h-[92px] items-center gap-5 rounded-[12px] bg-white px-6 py-4 shadow-[0_4px_16px_rgba(15,23,42,0.10)]">
-
-                    <div class="flex h-[54px] w-[54px] shrink-0 items-center justify-center rounded-[9px] border border-[#C9DCFF] bg-[#F6FAFF]">
-
+                    {{-- IKON CENTANG ASLI --}}
+                    @case('network')
+                    @case('building')
+                    @case('briefcase')
+                    @case('printer')
+                    @case('wrench')
                         <svg
-                            class="h-[24px] w-[24px] text-[#0969D8]"
+                            class="h-6 w-6 text-[#0969D8]"
                             viewBox="0 0 24 24"
                             fill="none"
                             stroke="currentColor"
                             stroke-width="1.8"
                             stroke-linecap="round"
                             stroke-linejoin="round"
+                            aria-hidden="true"
                         >
                             <circle cx="12" cy="12" r="9"/>
                             <path d="m8 12 2.5 2.5L16.5 9"/>
                         </svg>
+                    @break
+
+                    {{-- IKON CADANGAN --}}
+                    @default
+                        <svg
+                            class="h-6 w-6 text-[#0969D8]"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            aria-hidden="true"
+                        >
+                            <circle cx="12" cy="12" r="9"/>
+                            <path d="m8 12 2.5 2.5L16.5 9"/>
+                        </svg>
+                    @break
+
+                @endswitch
+
+            </div>
+
+            {{-- JUDUL LAYANAN DARI DATABASE --}}
+            <h3 class="text-sm font-medium leading-6 text-[#123B68] sm:text-base">
+                {{ $item->title }}
+            </h3>
+
+        </div>
+
+    @empty
+
+        <div class="rounded-xl bg-white px-5 py-6 text-sm leading-6 text-[#64748B] shadow-[0_4px_16px_rgba(15,23,42,0.10)]">
+            Layanan sedang diperbarui.
+        </div>
+
+    @endforelse
+
+</div>
+
+
+</div>
+
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+   
+
+{{-- =========================================================
+    CTA DINAMIS PRODUK & LAYANAN - CV ARINDAH
+========================================================= --}}
+
+@if (!$cta || $cta->is_active)
+
+    <section id="kontak" class="bg-white py-12 sm:py-16 lg:py-20">
+
+        <div class="mx-auto max-w-[1296px] px-5 sm:px-8 lg:px-8">
+
+            <div class="grid items-center gap-6 lg:grid-cols-[1.35fr_0.65fr] lg:gap-8">
+
+                {{-- KARTU CTA --}}
+                <div class="arindah-animate arindah-cta-card rounded-xl bg-white px-5 py-6 shadow-[0_4px_14px_rgba(15,23,42,0.12)] sm:px-8 sm:py-8">
+
+                    {{-- JUDUL CTA --}}
+                    <div class="rounded-lg border border-[#C9DCFF] bg-[#F6FAFF] px-4 py-4 text-center sm:px-6">
+
+                        <p class="text-sm font-semibold leading-6 text-[#123B68] sm:text-base">
+                            {{ $cta?->title ?? 'Butuh Produk atau Layanan untuk Kebutuhan Anda?' }}
+                        </p>
 
                     </div>
 
-
-                    <h3 class="max-w-[300px] text-[16px] font-medium leading-[1.2] text-[#123B68]">
-                        Solusi Kebutuhan<br>
-                        Usaha & Operasional
-                    </h3>
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-    </div>
-
-</section>
-
-
-
-{{-- =========================================================
-    CTA KHUSUS PRODUK & LAYANAN
-    BUKAN CTA BERANDA
-========================================================== --}}
-<section
-    id="kontak"
-    class="bg-white py-16 lg:py-20"
->
-
-    <div class="mx-auto max-w-[1296px] px-6 lg:px-8">
-
-
-        <div class="grid items-center gap-5 lg:grid-cols-[1.35fr_0.65fr]">
-
-
-            {{-- =================================================
-                CTA CARD
-            ================================================== --}}
-            <div
-                class="rounded-[12px] bg-white px-8 py-8 shadow-[0_4px_14px_rgba(15,23,42,0.12)]"
-            >
-
-                {{-- BOX PERTANYAAN --}}
-                <div
-                    class="rounded-[7px] border border-[#C9DCFF] bg-[#F6FAFF] px-6 py-4 text-center"
-                >
-
-                    <p class="text-[13px] font-medium text-[#123B68]">
-                        Butuh Produk atau Layanan untuk Kebutuhan Anda?
+                    {{-- DESKRIPSI CTA --}}
+                    <p class="mt-4 text-sm leading-6 text-[#64748B] sm:text-[14px]">
+                        {{ $cta?->description ?? 'Hubungi CV Arindah untuk mendapatkan informasi lebih lanjut mengenai produk dan layanan yang tersedia.' }}
                     </p>
 
+                    {{-- TOMBOL CTA --}}
+                    <div class="mt-5 flex justify-center">
+
+                        <a
+                            href="{{ url('/kontak') }}"
+                            class="inline-flex min-h-11 items-center justify-center rounded-lg bg-[#0969D8] px-7 py-3 text-sm font-semibold text-white shadow-[0_4px_12px_rgba(9,105,216,0.25)] transition duration-200 hover:-translate-y-0.5 hover:bg-[#075BB8] focus:outline-none focus:ring-4 focus:ring-blue-200"
+                        >
+                            {{ $cta?->button_text ?? 'Hubungi Kami' }}
+                        </a>
+
+                    </div>
+
                 </div>
 
+                {{-- FOTO CTA --}}
+                <div>
 
-                {{-- DESKRIPSI --}}
-                <p class="mt-4 max-w-[620px] text-[12px] leading-[1.55] text-[#64748B]">
-                    Hubungi CV Arindah untuk mendapatkan informasi lebih lanjut
-                    mengenai produk dan layanan yang tersedia.
-                </p>
-
-
-                {{-- BUTTON --}}
-                <div class="mt-5 flex justify-center">
-
-                    <a
-                        href="mailto:cv.arindah2016@gmail.com"
-                        class="inline-flex items-center justify-center rounded-[8px] bg-[#0969D8] px-7 py-2.5 text-[14px] font-semibold text-white shadow-[0_4px_12px_rgba(9,105,216,0.25)] transition duration-200 hover:bg-[#075bb8]"
+                    <img
+                        src="{{ $cta?->image
+                            ? \Illuminate\Support\Facades\Storage::disk('public')->url($cta->image)
+                            : asset('images/cta_produk_layanan.jpg') }}"
+                        alt="Hubungi CV Arindah"
+                        loading="lazy"
+                        class="arindah-animate arindah-cta-image h-[200px] w-full rounded-xl object-cover shadow-sm sm:h-[250px] lg:h-[220px]"
                     >
-                        Hubungi Kami
-                    </a>
 
                 </div>
 
             </div>
-
-
-
-            {{-- =================================================
-                CTA IMAGE
-            ================================================== --}}
-            <div>
-
-                <img
-                    src="/images/cta_produk_layanan.jpg"
-                    alt="Hubungi CV Arindah"
-                    class="h-[190px] w-full rounded-[10px] object-cover shadow-sm"
-                >
-
-            </div>
-
-
         </div>
+    </section>
 
-    </div>
-
-</section>
+@endif
 
 
-@endsection
+
+
+    {{-- =========================================================
+        STYLE ANIMASI
+        HERO TIDAK DIBERI ANIMASI AGAR FOTO LANGSUNG TAMPIL
+    ========================================================= --}}
+    <style>
+        .arindah-animate {
+            opacity: 0;
+            transform: translateY(22px);
+            transition:
+                opacity 650ms ease,
+                transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+
+        .arindah-animate.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .arindah-product-card {
+            transition:
+                opacity 650ms ease,
+                transform 650ms cubic-bezier(0.22, 1, 0.36, 1),
+                box-shadow 250ms ease;
+        }
+
+        .arindah-product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 24px rgba(15, 23, 42, 0.13);
+        }
+
+        .arindah-service-image {
+            transition:
+                opacity 700ms ease,
+                transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .arindah-service-card {
+            transition:
+                box-shadow 250ms ease,
+                transform 250ms ease;
+        }
+
+        .arindah-service-card:hover {
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.13);
+            transform: translateY(-2px);
+        }
+
+        .arindah-cta-image {
+            transition:
+                transform 500ms ease,
+                opacity 650ms ease;
+        }
+
+        .arindah-cta-image:hover {
+            transform: scale(1.015);
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .arindah-animate,
+            .arindah-animate.is-visible,
+            .arindah-product-card,
+            .arindah-service-image,
+            .arindah-service-card,
+            .arindah-cta-image {
+                transition: none !important;
+                transform: none !important;
+                animation: none !important;
+            }
+
+            .arindah-animate {
+                opacity: 1 !important;
+            }
+        }
+    </style>
+
+
+    {{-- =========================================================
+        JAVASCRIPT ANIMASI SAAT SECTION MASUK KE LAYAR
+    ========================================================= --}}
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        const animatedItems = document.querySelectorAll(
+            '#produk .arindah-product-card, ' +
+            '#layanan .arindah-service-card, ' +
+            '#layanan .arindah-service-image, ' +
+            '#kontak .arindah-cta-card, ' +
+            '#kontak .arindah-cta-image'
+        );
+
+        // Jeda animasi kartu produk
+        document.querySelectorAll('#produk .arindah-product-card')
+            .forEach((item, index) => {
+                item.style.transitionDelay = `${index * 90}ms`;
+            });
+
+        // Jeda animasi kartu layanan
+        document.querySelectorAll('#layanan .arindah-service-card')
+            .forEach((item, index) => {
+                item.style.transitionDelay = `${index * 100}ms`;
+            });
+
+        // Jika browser tidak mendukung IntersectionObserver,
+        // tampilkan semua elemen tanpa menunggu animasi.
+        if (!('IntersectionObserver' in window)) {
+            animatedItems.forEach(item => {
+                item.classList.add('is-visible');
+            });
+
+            return;
+        }
+
+        const observer = new IntersectionObserver(
+            (entries, currentObserver) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        currentObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            {
+                threshold: 0.12,
+                rootMargin: '0px 0px -35px 0px'
+            }
+        );
+
+        animatedItems.forEach(item => {
+            observer.observe(item);
+        });
+
+    });
+    </script>
+
+    @endsection

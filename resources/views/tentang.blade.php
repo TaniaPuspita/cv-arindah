@@ -1,77 +1,101 @@
-
 @extends('layouts.app')
 
 @section('content')
 
-{{-- =========================================================
-    1. HERO TENTANG KAMI
-========================================================= --}}
-<section class="relative isolate scroll-mt-24 overflow-hidden bg-[#EAF4FF]">
 
-    {{-- FOTO (MOBILE): di atas teks, memudar ke bawah --}}
-    <div class="relative h-[240px] w-full sm:h-[300px] lg:hidden">
+
+{{-- =========================================================
+    HERO TENTANG KAMI
+========================================================= --}}
+
+<section class="relative isolate overflow-hidden bg-[#EAF4FF]">
+
+    {{-- GAMBAR MOBILE --}}
+    <div class="relative h-[210px] w-full sm:h-[250px] lg:hidden">
         <img
-            src="{{ asset('images/tentangkami/hero_tentangkami.jpg') }}"
+            src="{{ $aboutPage?->hero_image
+                ? asset('storage/' . $aboutPage->hero_image)
+                : asset('images/hero_tentangkami.jpg') }}"
             alt="Tentang CV Arindah"
             class="h-full w-full object-cover object-center">
 
         <div class="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#EAF4FF] to-transparent"></div>
     </div>
 
-    {{-- FOTO (DESKTOP): penuh di kanan, menempel tepi atas & kanan --}}
-    <div class="pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] lg:block" aria-hidden="true">
+    {{-- GAMBAR DESKTOP --}}
+    <div
+        class="pointer-events-none absolute inset-y-0 right-0 hidden w-[62%] lg:block"
+        aria-hidden="true">
+
         <img
-            src="{{ asset('images/hero_tentangkami.jpg') }}"
+            src="{{ $aboutPage?->hero_image
+                ? asset('storage/' . $aboutPage->hero_image)
+                : asset('images/hero_tentangkami.jpg') }}"
             alt=""
             class="h-full w-full object-cover object-center">
 
-        {{-- kiri memudar ke warna latar --}}
-        <div class="absolute inset-y-0 left-0 w-[60%] bg-gradient-to-r from-[#EAF4FF] via-[#EAF4FF]/75 to-transparent"></div>
+        {{-- GRADASI AGAR MENYATU DENGAN AREA TEKS --}}
+        <div class="absolute inset-y-0 left-0 w-[65%] bg-gradient-to-r from-[#EAF4FF] via-[#EAF4FF]/80 to-transparent"></div>
 
-        {{-- bawah menyatu dengan latar --}}
-        <div class="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#EAF4FF] to-transparent"></div>
+        <div class="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-[#EAF4FF]/40 to-transparent"></div>
     </div>
 
-    {{-- TEKS --}}
-    {{-- POSISI DISESUAIKAN DENGAN BERANDA --}}
-    <div class="relative z-10 mx-auto max-w-[1440px] px-8 lg:px-[32px]">
-        <div class="flex items-center pb-12 pt-4 lg:min-h-[440px] lg:py-20">
+    {{-- AREA KONTEN --}}
+    <div class="relative z-10 mx-auto max-w-[1440px] px-5 sm:px-8 lg:px-8">
 
-            <div class="max-w-[460px]">
+        <div class="flex items-center py-9 sm:py-11 lg:min-h-[470px] lg:py-10">
 
+            <div class="w-full max-w-[500px]">
+
+                {{-- LABEL --}}
                 <p class="text-sm font-bold uppercase leading-6 tracking-wide text-[#0969D8]">
-                    Tentang Kami
+                    {{ $aboutPage?->hero_label ?: 'TENTANG KAMI' }}
                 </p>
 
-                <h1 class="mt-3 text-4xl font-bold leading-[1.12] tracking-tight text-[#123B68] sm:text-5xl lg:text-[46px] xl:text-[52px]">
-                    Mengenal
-                    <span class="block">Lebih Dekat</span>
-                    <span class="block text-[#0969D8]">CV Arindah</span>
+                {{-- JUDUL --}}
+                <h1 class="mt-3 max-w-[460px] text-4xl font-bold leading-[1.12] tracking-tight text-[#123B68] sm:text-5xl lg:text-[46px] xl:text-[52px]">
+                    {{ $aboutPage?->hero_title_line1 ?: 'Mengenal' }}
+                    <span class="block">{{ $aboutPage?->hero_title_line2 ?: 'Lebih Dekat' }}</span>
+                    <span class="block text-[#0969D8]">{{ $aboutPage?->hero_title_line3 ?: 'CV Arindah' }}</span>
                 </h1>
 
-                <p class="mt-5 max-w-[400px] text-sm leading-6 text-[#4F6683] md:text-base md:leading-7">
-                    Mengenal lebih dekat profil, kegiatan usaha, serta
-                    aktivitas CV Arindah dalam menyediakan berbagai
-                    kebutuhan produk dan layanan teknologi informasi.
+                {{-- DESKRIPSI --}}
+                <p class="mt-5 max-w-[420px] text-sm leading-6 text-[#4F6683] md:text-base md:leading-7">
+                    {{ $aboutPage?->hero_description ?: 'Mengenal lebih dekat profil, kegiatan usaha, serta aktivitas CV Arindah dalam menyediakan berbagai kebutuhan produk dan layanan teknologi informasi.' }}
                 </p>
 
-                <div class="mt-8 flex flex-wrap items-center gap-3">
-                    <a href="{{ route('kontak') }}"
-                       class="group inline-flex items-center gap-2 rounded-lg bg-[#0969D8] px-5 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:-translate-y-1 hover:bg-[#075BBF] focus:outline-none focus:ring-4 focus:ring-blue-200">
+                {{-- TOMBOL --}}
+                <div class="mt-7 flex flex-wrap items-center gap-3">
+
+                    <a
+                        href="{{ route('kontak') }}"
+                        class="group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-[#0969D8] px-5 py-3 text-sm font-semibold text-white shadow-md transition duration-300 hover:-translate-y-0.5 hover:bg-[#075BBF] focus:outline-none focus:ring-4 focus:ring-blue-200">
+
                         Hubungi Kami
-                        <span class="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+
+                        <span class="transition-transform duration-300 group-hover:translate-x-1">
+                        </span>
                     </a>
 
-                    <a href="{{ url('/') }}#produk"
-                       class="inline-flex items-center rounded-lg border border-[#9CC3EE] bg-white/70 px-5 py-3 text-sm font-semibold text-[#0969D8] transition duration-300 hover:-translate-y-1 hover:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100">
+                    <a
+                        href="{{ route('produk') }}"
+                        class="inline-flex min-h-[44px] items-center justify-center rounded-lg border border-[#9CC3EE] bg-white/80 px-5 py-3 text-sm font-semibold text-[#0969D8] transition duration-300 hover:-translate-y-0.5 hover:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100">
+
                         Lihat Produk
                     </a>
+
                 </div>
 
             </div>
+
         </div>
+
     </div>
+
 </section>
+
+
+
 
 
 {{-- =========================================================
@@ -87,7 +111,9 @@
 
                 <div class="group relative overflow-hidden rounded-2xl border border-[#E3ECF5] bg-white shadow-[0_12px_35px_rgba(27,69,109,0.08)]">
                     <img
-                        src="{{ asset('images/tentangkami/detail_tentangkami.jpg') }}"
+                        src="{{ $aboutPage && $aboutPage->profile_image
+                            ? asset('storage/' . $aboutPage->profile_image)
+                            : asset('images/tentangkami/detail_tentangkami.jpg') }}"
                         alt="Aktivitas CV Arindah"
                         class="h-[280px] w-full object-cover transition duration-700 group-hover:scale-105 md:h-[320px]">
                 </div>
@@ -96,30 +122,30 @@
             {{-- TEXT --}}
             <div>
                 <span class="text-xs font-bold uppercase tracking-[0.15em] text-[#0969D8]">
-                    Tentang Kami
+                    {{ $aboutPage && $aboutPage->profile_label
+                        ? $aboutPage->profile_label
+                        : 'Tentang Kami' }}
                 </span>
 
                 <h2 class="mt-2 text-2xl font-bold text-[#193F6B] md:text-3xl">
-                    Mengenal CV Arindah
+                    {{ $aboutPage && $aboutPage->profile_title
+                        ? $aboutPage->profile_title
+                        : 'Mengenal CV Arindah' }}
                 </h2>
 
                 <div class="mt-4 h-1 w-12 rounded-full bg-[#0969D8]"></div>
 
                 <div class="mt-5 space-y-4 text-sm leading-6 text-[#687C95]">
                     <p>
-                        CV Arindah merupakan perusahaan yang menjalankan
-                        berbagai kegiatan usaha dalam bidang perdagangan
-                        barang dan teknologi informasi. Kegiatan usaha yang
-                        tersedia mencakup berbagai kategori produk, mulai
-                        dari komputer dan teknologi, elektronik dan furniture,
-                        perlengkapan kantor, audio dan video, laboratorium
-                        dan kesehatan, hingga kebutuhan sehari-hari.
+                        {{ $aboutPage && $aboutPage->profile_paragraph_one
+                            ? $aboutPage->profile_paragraph_one
+                            : 'CV Arindah merupakan perusahaan yang menjalankan berbagai kegiatan usaha dalam bidang perdagangan barang dan teknologi informasi. Kegiatan usaha yang tersedia mencakup berbagai kategori produk, mulai dari komputer dan teknologi, elektronik dan furniture, perlengkapan kantor, audio dan video, laboratorium dan kesehatan, hingga kebutuhan sehari-hari.' }}
                     </p>
 
                     <p>
-                        Selain kegiatan perdagangan, CV Arindah juga memiliki
-                        aktivitas di bidang teknologi informasi dan jasa komputer
-                        lainnya sebagai bagian dari kegiatan usaha perusahaan.
+                        {{ $aboutPage && $aboutPage->profile_paragraph_two
+                            ? $aboutPage->profile_paragraph_two
+                            : 'Selain kegiatan perdagangan, CV Arindah juga memiliki aktivitas di bidang teknologi informasi dan jasa komputer lainnya sebagai bagian dari kegiatan usaha perusahaan.' }}
                     </p>
                 </div>
             </div>
@@ -127,6 +153,9 @@
         </div>
     </div>
 </section>
+
+
+
 
 
 {{-- =========================================================
@@ -137,11 +166,11 @@
 
         <div class="mb-8">
             <span class="text-xs font-bold uppercase tracking-[0.15em] text-[#0969D8]">
-                CV Arindah Dalam Singkat
+                {{ $aboutPage?->info_label ?: 'CV Arindah Dalam Singkat' }}
             </span>
 
             <h2 class="mt-2 text-2xl font-bold text-[#193F6B] md:text-3xl">
-                Informasi Utama Kami
+                {{ $aboutPage?->info_title ?: 'Informasi Utama Kami' }}
             </h2>
         </div>
 
@@ -160,11 +189,10 @@
 
                     <div>
                         <h3 class="text-sm font-bold text-[#193F6B]">
-                            6 Kategori Produk
+                            {{ $aboutPage?->info_one_title ?: '6 Kategori Produk' }}
                         </h3>
                         <p class="mt-2 text-xs leading-5 text-[#71839A]">
-                            Beragam kategori produk untuk memenuhi
-                            berbagai kebutuhan pelanggan.
+                            {{ $aboutPage?->info_one_description ?: 'Beragam kategori produk untuk memenuhi berbagai kebutuhan pelanggan.' }}
                         </p>
                     </div>
                 </div>
@@ -184,12 +212,10 @@
 
                     <div>
                         <h3 class="text-sm font-bold text-[#193F6B]">
-                            Teknologi Informasi
+                            {{ $aboutPage?->info_two_title ?: 'Teknologi Informasi' }}
                         </h3>
                         <p class="mt-2 text-xs leading-5 text-[#71839A]">
-                            Aktivitas teknologi informasi dan jasa
-                            komputer lainnya sebagai bagian dari
-                            kegiatan usaha perusahaan.
+                            {{ $aboutPage?->info_two_description ?: 'Aktivitas teknologi informasi dan jasa komputer lainnya sebagai bagian dari kegiatan usaha perusahaan.' }}
                         </p>
                     </div>
                 </div>
@@ -209,11 +235,10 @@
 
                     <div>
                         <h3 class="text-sm font-bold text-[#193F6B]">
-                            Berbasis di Bali
+                            {{ $aboutPage?->info_three_title ?: 'Berbasis di Bali' }}
                         </h3>
                         <p class="mt-2 text-xs leading-5 text-[#71839A]">
-                            Jalan Dewaratwati Nomor 23,
-                            Mengwitani, Mengwi, Badung, Bali.
+                            {{ $aboutPage?->info_three_description ?: 'Jalan Dewaratwati Nomor 23, Mengwitani, Mengwi, Badung, Bali.' }}
                         </p>
                     </div>
                 </div>
@@ -222,6 +247,8 @@
         </div>
     </div>
 </section>
+
+
 
 
 {{-- =========================================================
@@ -239,18 +266,17 @@
             <div class="mb-3 flex items-center justify-center gap-3">
                 <span class="h-[2px] w-8 rounded-full bg-[#0969D8]"></span>
                 <span class="text-xs font-bold uppercase tracking-[0.2em] text-[#0969D8]">
-                    Visi & Misi
+                    {{ $aboutPage?->vision_mission_label ?: 'Visi & Misi' }}
                 </span>
                 <span class="h-[2px] w-8 rounded-full bg-[#0969D8]"></span>
             </div>
 
             <h2 class="text-3xl font-bold text-[#193F6B] md:text-4xl">
-                Visi dan Misi CV Arindah
+                {{ $aboutPage?->vision_mission_title ?: 'Visi dan Misi CV Arindah' }}
             </h2>
 
             <p class="mx-auto mt-3 max-w-2xl text-sm leading-6 text-[#71839A]">
-                Landasan dan arah CV Arindah dalam memberikan produk
-                dan layanan terbaik bagi pelanggan.
+                {{ $aboutPage?->vision_mission_description ?: 'Landasan dan arah CV Arindah dalam memberikan produk dan layanan terbaik bagi pelanggan.' }}
             </p>
         </div>
 
@@ -284,10 +310,7 @@
                 <div class="relative my-6 h-px bg-[#E6EEF7]"></div>
 
                 <p class="relative text-base font-medium leading-8 text-[#526A84] md:text-lg">
-                    Menjadi perusahaan yang mampu memenuhi beragam
-                    kebutuhan pelanggan melalui penyediaan produk
-                    dan layanan teknologi informasi yang sesuai
-                    dengan kebutuhan.
+                    {{ $aboutPage?->vision ?: 'Menjadi perusahaan yang mampu memenuhi beragam kebutuhan pelanggan melalui penyediaan produk dan layanan teknologi informasi yang sesuai dengan kebutuhan.' }}
                 </p>
 
                 <div class="relative mt-7 flex items-center gap-2">
@@ -326,9 +349,7 @@
                 <div class="relative my-6 h-px bg-[#E6EEF7]"></div>
 
                 <p class="relative text-sm leading-6 text-[#71839A]">
-                    Memberikan produk dan layanan yang dapat membantu
-                    memenuhi kebutuhan pelanggan serta mendukung
-                    kebutuhan teknologi informasi.
+                    {{ $aboutPage?->mission_description ?: 'Memberikan produk dan layanan yang dapat membantu memenuhi kebutuhan pelanggan serta mendukung kebutuhan teknologi informasi.' }}
                 </p>
 
                 <div class="relative mt-5 space-y-4">
@@ -341,11 +362,10 @@
 
                         <div>
                             <h4 class="text-sm font-bold text-[#0969D8]">
-                                Menyediakan Beragam Produk
+                                {{ $aboutPage?->mission_one_title ?: 'Menyediakan Beragam Produk' }}
                             </h4>
                             <p class="mt-1 text-xs leading-5 text-[#71839A]">
-                                Menyediakan berbagai kategori produk
-                                untuk memenuhi kebutuhan pelanggan.
+                                {{ $aboutPage?->mission_one_description ?: 'Menyediakan berbagai kategori produk untuk memenuhi kebutuhan pelanggan.' }}
                             </p>
                         </div>
                     </div>
@@ -358,12 +378,10 @@
 
                         <div>
                             <h4 class="text-sm font-bold text-[#0969D8]">
-                                Mendukung Kebutuhan Teknologi
+                                {{ $aboutPage?->mission_two_title ?: 'Mendukung Kebutuhan Teknologi' }}
                             </h4>
                             <p class="mt-1 text-xs leading-5 text-[#71839A]">
-                                Menyediakan produk komputer dan teknologi
-                                serta aktivitas teknologi informasi sesuai
-                                dengan bidang usaha perusahaan.
+                                {{ $aboutPage?->mission_two_description ?: 'Menyediakan produk komputer dan teknologi serta aktivitas teknologi informasi sesuai dengan bidang usaha perusahaan.' }}
                             </p>
                         </div>
                     </div>
@@ -376,12 +394,10 @@
 
                         <div>
                             <h4 class="text-sm font-bold text-[#0969D8]">
-                                Memberikan Informasi yang Jelas
+                                {{ $aboutPage?->mission_three_title ?: 'Memberikan Informasi yang Jelas' }}
                             </h4>
                             <p class="mt-1 text-xs leading-5 text-[#71839A]">
-                                Menyediakan informasi yang membantu
-                                pelanggan mengenali produk dan layanan
-                                yang tersedia.
+                                {{ $aboutPage?->mission_three_description ?: 'Menyediakan informasi yang membantu pelanggan mengenali produk dan layanan yang tersedia.' }}
                             </p>
                         </div>
                     </div>
@@ -392,6 +408,8 @@
         </div>
     </div>
 </section>
+
+
 
 
 {{-- =========================================================
@@ -409,48 +427,74 @@
             {{-- CTA CONTENT --}}
             <div class="group relative overflow-hidden rounded-2xl border border-white/80 bg-white p-7 shadow-[0_15px_45px_rgba(15,23,42,0.08)] sm:p-9">
 
-                <div class="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#EAF4FF] transition duration-500 group-hover:scale-125"></div>
+                <div class="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#EAF4FF] transition duration-500 group-hover:scale-125"></div>
 
                 <div class="relative z-10">
+
+                    {{-- CTA LABEL --}}
                     <div class="flex items-center gap-3">
                         <span class="h-[2px] w-8 rounded-full bg-[#0969D8]"></span>
+
                         <p class="text-xs font-bold tracking-[0.15em] text-[#0969D8]">
-                            BUTUH INFORMASI LEBIH LANJUT?
+                            {{ $aboutPage?->cta_label ?: 'BUTUH INFORMASI LEBIH LANJUT?' }}
                         </p>
                     </div>
 
+                    {{-- CTA TITLE --}}
+                    @php
+                        $ctaTitle = $aboutPage?->cta_title
+                            ?: 'Mari Terhubung dengan CV Arindah';
+
+                        $highlightText = 'CV Arindah';
+                    @endphp
+
                     <h2 class="mt-5 text-2xl font-bold leading-tight text-[#123B68] md:text-3xl">
-                        Mari Terhubung dengan
-                        <span class="text-[#0969D8]">CV Arindah</span>
+                        @if(\Illuminate\Support\Str::contains($ctaTitle, $highlightText))
+                            {{ \Illuminate\Support\Str::before($ctaTitle, $highlightText) }}<span class="text-[#0969D8]">{{ $highlightText }}</span>{{ \Illuminate\Support\Str::after($ctaTitle, $highlightText) }}
+                        @else
+                            {{ $ctaTitle }}
+                        @endif
                     </h2>
 
+                    {{-- CTA DESCRIPTION --}}
                     <p class="mt-3 max-w-xl text-sm leading-6 text-[#64748B]">
-                        Hubungi CV Arindah untuk mendapatkan informasi
-                        mengenai produk dan layanan yang tersedia.
+                        {{ $aboutPage?->cta_description ?: 'Hubungi CV Arindah untuk mendapatkan informasi mengenai produk dan layanan yang tersedia.' }}
                     </p>
 
-                    <div class="mt-6">
-                        <a href="{{ route('kontak') }}"
-                           class="group inline-flex items-center gap-2 rounded-lg bg-[#0988F5] px-5 py-3 text-sm font-semibold text-white shadow-[0_7px_18px_rgba(9,136,245,0.22)] transition duration-300 hover:-translate-y-1 hover:bg-[#0879DB] hover:shadow-lg">
-                            Hubungi Kami
-                            <span class="transition duration-300 group-hover:translate-x-1">→</span>
-                        </a>
-                    </div>
+                    
+{{-- CTA BUTTON --}}
+<div class="mt-6 flex justify-center">
+    <a href="{{ route('kontak') }}"
+       class="group inline-flex items-center gap-2 rounded-lg bg-[#0988F5] px-5 py-3 text-sm font-semibold text-white shadow-[0_7px_18px_rgba(9,136,245,0.22)] transition duration-300 hover:-translate-y-1 hover:bg-[#0879DB] hover:shadow-lg">
+
+        {{ $aboutPage?->cta_button_text ?: 'Hubungi Kami' }}
+
+        <span class="transition duration-300 group-hover:translate-x-1">
+            <i class="bi bi-arrow-right"></i>
+        </span>
+    </a>
+</div>
+
+
                 </div>
             </div>
 
             {{-- CTA IMAGE --}}
             <div class="group relative min-h-[230px] overflow-hidden rounded-2xl shadow-[0_15px_40px_rgba(15,23,42,0.10)]">
+
                 <img
-                    src="{{ asset('images/tentangkami/cta_tentangkami.jpg') }}"
+                    src="{{ $aboutPage?->cta_image ? asset('storage/' . $aboutPage->cta_image) : asset('images/tentangkami/cta_tentangkami.jpg') }}"
                     alt="Hubungi CV Arindah"
-                    class="h-full min-h-[230px] w-full object-cover transition duration-700 group-hover:scale-105">
+                    class="h-full min-h-[230px] w-full object-cover transition duration-700 group-hover:scale-105"
+                    loading="lazy"
+                    onerror="this.onerror=null; this.src='{{ asset('images/tentangkami/cta_tentangkami.jpg') }}';">
 
                 <div class="absolute inset-0 bg-gradient-to-t from-[#123B68]/35 via-transparent to-transparent"></div>
 
                 <div class="absolute bottom-5 left-5 rounded-full border border-white/30 bg-white/15 px-4 py-2 text-[10px] font-semibold text-white backdrop-blur-md">
                     CV Arindah
                 </div>
+
             </div>
 
         </div>
