@@ -17,7 +17,7 @@ $login = function () {
 
     $this->redirectIntended(
         default: route('dashboard', absolute: false),
-        navigate: true
+        navigate: false
     );
 };
 

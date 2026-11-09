@@ -23,12 +23,12 @@
         </p>
     </section>
 
-    {{-- NOTIFIKASI VALIDASI --}}
+    {{-- NOTIFIKASI ERROR --}}
     @if ($errors->any())
-        <div class="cms-alert cms-alert-error" role="alert">
-            <strong>Periksa kembali data yang kamu masukkan.</strong>
+        <div class="alert alert-danger" role="alert">
+            <strong>Periksa kembali isian berikut:</strong>
 
-            <ul>
+            <ul class="mb-0 mt-2">
                 @foreach ($errors->all() as $error)
                     <li>{{ $error }}</li>
                 @endforeach
@@ -47,6 +47,7 @@
 
             <div>
                 <h3>Pengaturan Konten CTA</h3>
+
                 <p>
                     Perubahan berikut hanya ditujukan untuk CTA
                     pada halaman Produk &amp; Layanan.
@@ -62,192 +63,256 @@
             @csrf
             @method('PUT')
 
-            {{-- JUDUL CTA --}}
-            <div class="cms-form-group">
-                <label for="title">Judul CTA</label>
+            <div class="p-4">
 
-                <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    class="cms-input"
-                    value="{{ old('title', $cta?->title ?? 'Butuh Produk atau Layanan untuk Kebutuhan Anda?') }}"
-                    maxlength="255"
-                    placeholder="Contoh: Butuh Produk atau Layanan untuk Kebutuhan Anda?"
-                    required
-                >
+                {{-- JUDUL CTA --}}
+                <div class="cms-form-group">
+                    <label for="title">Judul CTA</label>
 
-                @error('title')
-                    <small class="field-error">{{ $message }}</small>
-                @enderror
-            </div>
+                    <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        class="cms-input"
+                        value="{{ old('title', $cta?->title ?? 'Butuh Produk atau Layanan untuk Kebutuhan Anda?') }}"
+                        maxlength="255"
+                        placeholder="Contoh: Butuh Produk atau Layanan untuk Kebutuhan Anda?"
+                        required
+                    >
 
-            {{-- DESKRIPSI CTA --}}
-            <div class="cms-form-group">
-                <label for="description">Deskripsi CTA</label>
+                    @error('title')
+                        <small class="field-error">
+                            {{ $message }}
+                        </small>
+                    @enderror
+                </div>
 
-                <textarea
-                    id="description"
-                    name="description"
-                    class="cms-input cms-textarea"
-                    rows="5"
-                    maxlength="5000"
-                    placeholder="Masukkan deskripsi CTA..."
-                    required
-                >{{ old('description', $cta?->description ?? 'Hubungi CV Arindah untuk mendapatkan informasi lebih lanjut mengenai produk dan layanan yang tersedia.') }}</textarea>
+                {{-- DESKRIPSI CTA --}}
+                <div class="cms-form-group">
+                    <label for="description">Deskripsi CTA</label>
 
-                <small class="field-hint">
-                    Masukkan informasi singkat yang mengajak pengunjung
-                    menghubungi CV Arindah.
-                </small>
+                    <textarea
+                        id="description"
+                        name="description"
+                        class="cms-input cms-textarea"
+                        rows="5"
+                        maxlength="5000"
+                        placeholder="Masukkan deskripsi CTA..."
+                        required
+                    >{{ old('description', $cta?->description ?? 'Hubungi CV Arindah untuk mendapatkan informasi lebih lanjut mengenai produk dan layanan yang tersedia.') }}</textarea>
 
-                @error('description')
-                    <small class="field-error">{{ $message }}</small>
-                @enderror
-            </div>
+                    <small class="field-hint">
+                        Masukkan informasi singkat yang mengajak pengunjung
+                        menghubungi CV Arindah.
+                    </small>
 
-            {{-- TEKS TOMBOL --}}
-            <div class="cms-form-group">
-                <label for="button_text">Teks Tombol</label>
+                    @error('description')
+                        <small class="field-error">
+                            {{ $message }}
+                        </small>
+                    @enderror
+                </div>
 
-                <input
-                    type="text"
-                    id="button_text"
-                    name="button_text"
-                    class="cms-input"
-                    value="{{ old('button_text', $cta?->button_text ?? 'Hubungi Kami') }}"
-                    maxlength="100"
-                    placeholder="Contoh: Hubungi Kami"
-                    required
-                >
+                {{-- TEKS TOMBOL --}}
+                <div class="cms-form-group">
+                    <label for="button_text">Teks Tombol</label>
 
-                @error('button_text')
-                    <small class="field-error">{{ $message }}</small>
-                @enderror
-            </div>
+                    <input
+                        type="text"
+                        id="button_text"
+                        name="button_text"
+                        class="cms-input"
+                        value="{{ old('button_text', $cta?->button_text ?? 'Hubungi Kami') }}"
+                        maxlength="100"
+                        placeholder="Contoh: Hubungi Kami"
+                        required
+                    >
 
-            {{-- TUJUAN TOMBOL --}}
-            <div class="cms-form-group">
-                <label for="email">Tujuan Tombol</label>
+                    @error('button_text')
+                        <small class="field-error">
+                            {{ $message }}
+                        </small>
+                    @enderror
+                </div>
 
-                <input
-                    type="text"
-                    id="email"
-                    name="email"
-                    class="cms-input"
-                    value="{{ old('email', $cta?->email ?? '/kontak') }}"
-                    maxlength="2048"
-                    placeholder="/kontak atau nama@email.com"
-                    required
-                >
+                {{-- TUJUAN TOMBOL --}}
+                <div class="cms-form-group">
+                    <label for="email">Tujuan Tombol</label>
 
-                <small class="field-hint">
-                    Isi /kontak untuk menuju halaman Kontak, alamat email
-                    untuk membuka aplikasi email, atau URL HTTPS untuk
-                    menuju website lain.
-                </small>
+                    <input
+                        type="text"
+                        id="email"
+                        name="email"
+                        class="cms-input"
+                        value="{{ old('email', $cta?->email ?? '/kontak') }}"
+                        maxlength="2048"
+                        placeholder="/kontak atau nama@email.com"
+                        required
+                    >
 
-                @error('email')
-                    <small class="field-error">{{ $message }}</small>
-                @enderror
-            </div>
+                    <small class="field-hint">
+                        Isi /kontak untuk menuju halaman Kontak, alamat email
+                        untuk membuka aplikasi email, atau URL HTTPS untuk
+                        menuju website lain.
+                    </small>
 
-            {{-- GAMBAR CTA --}}
-            <div class="cms-form-group">
-                <label for="image">Gambar CTA</label>
+                    @error('email')
+                        <small class="field-error">
+                            {{ $message }}
+                        </small>
+                    @enderror
+                </div>
 
-                @if ($cta?->image)
-                    <div class="current-image">
-                        <p>Gambar yang tersimpan saat ini:</p>
+                {{-- GAMBAR CTA --}}
+                <div class="cms-form-group">
+                    <label for="image">Gambar CTA</label>
+
+                    {{-- GAMBAR YANG TERSIMPAN --}}
+                    @if ($cta?->image)
+                        <div class="current-image mb-3">
+
+                            <p>Gambar yang tersimpan saat ini:</p>
+
+                            <img
+                                src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($cta->image) }}"
+                                alt="Gambar CTA Produk dan Layanan CV Arindah"
+                                class="cta-image-thumbnail"
+                            >
+
+                        </div>
+                    @else
+                        <div class="current-image mb-3">
+                            <p>Belum ada gambar CTA yang tersimpan.</p>
+                        </div>
+                    @endif
+
+                    {{-- INPUT UPLOAD GAMBAR --}}
+                    <input
+                        type="file"
+                        id="image"
+                        name="image"
+                        class="cms-input cms-file"
+                        accept=".jpg,.jpeg,.png,.webp"
+                    >
+
+                    <small class="field-hint">
+                        Format JPG, JPEG, PNG, atau WEBP. Maksimal 2 MB.
+                        Kosongkan jika tidak ingin mengganti gambar.
+                    </small>
+
+                    @error('image')
+                        <small class="field-error">
+                            {{ $message }}
+                        </small>
+                    @enderror
+
+                    {{-- PREVIEW GAMBAR BARU --}}
+                    <div
+                        id="image-preview-wrapper"
+                        class="current-image mt-3"
+                        hidden
+                    >
+                        <p>Preview gambar baru:</p>
 
                         <img
-                            src="{{ \Illuminate\Support\Facades\Storage::disk('public')->url($cta->image) }}"
-                            alt="Gambar CTA Produk dan Layanan CV Arindah"
+                            id="image-preview"
+                            src=""
+                            alt="Preview gambar CTA baru"
+                            class="cta-image-thumbnail"
                         >
                     </div>
-                @else
-                    <div class="current-image">
-                        <p>Belum ada gambar CTA yang tersimpan.</p>
-                    </div>
-                @endif
-
-                <input
-                    type="file"
-                    id="image"
-                    name="image"
-                    class="cms-input cms-file"
-                    accept=".jpg,.jpeg,.png,.webp"
-                >
-
-                <small class="field-hint">
-                    Format JPG, JPEG, PNG, atau WEBP. Maksimal 2 MB.
-                    Kosongkan jika tidak ingin mengganti gambar.
-                </small>
-
-                @error('image')
-                    <small class="field-error">{{ $message }}</small>
-                @enderror
-
-                {{-- PREVIEW GAMBAR BARU --}}
-                <div id="image-preview-wrapper" class="current-image" hidden>
-                    <p>Preview gambar baru:</p>
-                    <img id="image-preview" src="" alt="Preview gambar CTA baru">
                 </div>
-            </div>
 
-            {{-- STATUS CTA --}}
-            <div class="cms-form-group">
-                <label for="is_active">Status CTA</label>
+                {{-- STATUS CTA --}}
+                <div class="cms-form-group">
+                    <label for="is_active">Status CTA</label>
 
-                <select
-                    id="is_active"
-                    name="is_active"
-                    class="cms-input"
-                    required
-                >
-                    <option
-                        value="1"
-                        @selected((string) old('is_active', $cta?->is_active ?? 1) === '1')
+                    <select
+                        id="is_active"
+                        name="is_active"
+                        class="cms-input"
+                        required
                     >
-                        Aktif
-                    </option>
+                        <option
+                            value="1"
+                            @selected((string) old('is_active', $cta?->is_active ?? 1) === '1')
+                        >
+                            Aktif
+                        </option>
 
-                    <option
-                        value="0"
-                        @selected((string) old('is_active', $cta?->is_active ?? 1) === '0')
+                        <option
+                            value="0"
+                            @selected((string) old('is_active', $cta?->is_active ?? 1) === '0')
+                        >
+                            Nonaktif
+                        </option>
+                    </select>
+
+                    <small class="field-hint">
+                        CTA nonaktif nantinya tidak ditampilkan
+                        pada halaman publik.
+                    </small>
+
+                    @error('is_active')
+                        <small class="field-error">
+                            {{ $message }}
+                        </small>
+                    @enderror
+                </div>
+
+                {{-- TOMBOL AKSI --}}
+                <div class="cms-form-actions">
+
+                    <button type="submit" class="primary-button">
+                        <i class="bi bi-floppy me-1"></i>
+                        Simpan Perubahan
+                    </button>
+
+                    <a
+                        href="{{ route('admin.produk-layanan.layanan-items.index') }}"
+                        class="secondary-button text-decoration-none"
                     >
-                        Nonaktif
-                    </option>
-                </select>
+                        Batal
+                    </a>
 
-                <small class="field-hint">
-                    CTA nonaktif nantinya tidak ditampilkan pada halaman publik.
-                </small>
-
-                @error('is_active')
-                    <small class="field-error">{{ $message }}</small>
-                @enderror
-            </div>
-
-            {{-- TOMBOL AKSI --}}
-            <div class="cms-form-actions">
-
-                <button type="submit" class="primary-button">
-                    <i class="bi bi-floppy"></i>
-                    Simpan Perubahan
-                </button>
-
-                <a
-                    href="{{ route('admin.produk-layanan.layanan-items.index') }}"
-                    class="secondary-button"
-                >
-                    Batal
-                </a>
+                </div>
 
             </div>
-
         </form>
+
     </section>
+
+    {{-- CSS KHUSUS PREVIEW GAMBAR CTA --}}
+    <style>
+        .current-image .cta-image-thumbnail,
+        .current-image #image-preview {
+            display: block;
+            width: 320px;
+            max-width: 100%;
+            height: 220px;
+            max-height: 220px;
+            margin: 0;
+            object-fit: cover;
+            object-position: center;
+            border: 1px solid #e2eaf3;
+            border-radius: 10px;
+            background: #f8fafc;
+            box-sizing: border-box;
+        }
+
+        #image-preview-wrapper[hidden] {
+            display: none !important;
+        }
+
+        @media (max-width: 576px) {
+            .current-image .cta-image-thumbnail,
+            .current-image #image-preview {
+                width: 100%;
+                height: 200px;
+                max-height: 200px;
+            }
+        }
+    </style>
 
     {{-- PREVIEW GAMBAR SEBELUM DIUNGGAH --}}
     <script>
@@ -256,10 +321,19 @@
             const wrapper = document.getElementById('image-preview-wrapper');
             const preview = document.getElementById('image-preview');
 
-            if (!input || !wrapper || !preview) return;
+            if (!input || !wrapper || !preview) {
+                return;
+            }
+
+            let previousObjectUrl = null;
 
             input.addEventListener('change', function () {
                 const file = this.files && this.files[0];
+
+                if (previousObjectUrl) {
+                    URL.revokeObjectURL(previousObjectUrl);
+                    previousObjectUrl = null;
+                }
 
                 if (!file) {
                     preview.removeAttribute('src');
@@ -274,7 +348,8 @@
                     return;
                 }
 
-                preview.src = URL.createObjectURL(file);
+                previousObjectUrl = URL.createObjectURL(file);
+                preview.src = previousObjectUrl;
                 wrapper.hidden = false;
             });
         });

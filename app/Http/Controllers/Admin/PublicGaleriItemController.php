@@ -16,14 +16,7 @@ class PublicGaleriItemController extends Controller
      */
     public function index()
     {
-        $hero = PublicGaleriHero::firstOrCreate(
-            ['id' => 1],
-            [
-                'eyebrow' => 'KOLEKSI',
-                'title' => 'Produk, Aktivitas & Layanan Kami',
-                'description' => 'Beragam produk untuk mendukung kebutuhan teknologi, perkantoran, elektronik, dan kebutuhan lainnya.',
-            ]
-        );
+        $hero = PublicGaleriHero::query()->findOrFail(1);
 
         $items = PublicGaleriItem::query()
             ->orderBy('sort_order')

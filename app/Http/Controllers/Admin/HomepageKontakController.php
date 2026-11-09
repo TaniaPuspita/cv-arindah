@@ -6,27 +6,29 @@ use App\Http\Controllers\Controller;
 use App\Models\HomepageKontak;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Validation\Rule;
 
 class HomepageKontakController extends Controller
 {
+    /**
+     * Menampilkan form CMS Kontak Beranda.
+     */
     public function edit()
     {
-        $kontak = HomepageKontak::firstOrCreate(
-            ['id' => 1],
-            [
-                'label' => 'KONTAK',
-                'title' => 'Mari Terhubung dengan CV Arindah',
-                'description' => 'Punya kebutuhan produk atau layanan? Hubungi kami untuk mendapatkan informasi lebih lanjut mengenai kebutuhan Anda.',
-                'button_text' => 'Hubungi Kami',
-                'button_link' => 'mailto:cv.arindah2016@gmail.com',
-                'background_image' => 'images/cta_beranda.jpg',
-            ]
-        );
+        $kontak = HomepageKontak::first();
+
+        if (!$kontak) {
+            abort(
+                500,
+                'Data Kontak Beranda belum tersedia. Jalankan HomepageKontakSeeder terlebih dahulu.'
+            );
+        }
 
         return view('admin.homepage-kontak.edit', compact('kontak'));
     }
 
+    /**
+     * Memperbarui konten CMS Kontak Beranda.
+     */
     public function update(Request $request)
     {
         $validated = $request->validate([
@@ -54,18 +56,15 @@ class HomepageKontakController extends Controller
             'button_link.max' => 'Tautan tombol maksimal 2048 karakter.',
         ]);
 
-        $kontak = HomepageKontak::firstOrCreate(
-            ['id' => 1],
-            [
-                'label' => 'KONTAK',
-                'title' => 'Mari Terhubung dengan CV Arindah',
-                'description' => 'Punya kebutuhan produk atau layanan? Hubungi kami untuk mendapatkan informasi lebih lanjut mengenai kebutuhan Anda.',
-                'button_text' => 'Hubungi Kami',
-                'button_link' => 'mailto:cv.arindah2016@gmail.com',
-                'background_image' => 'images/cta_beranda.jpg',
-            ]
-        );
+        // Ambil data yang sudah disediakan oleh Seeder.
+        if (!$kontak = HomepageKontak::first()) {
+            abort(
+                500,
+                'Data Kontak Beranda belum tersedia. Jalankan HomepageKontakSeeder terlebih dahulu.'
+            );
+        }
 
+        // Proses upload gambar latar jika ada gambar baru.
         if ($request->hasFile('background_image')) {
             $oldImage = $kontak->background_image;
 
@@ -82,6 +81,7 @@ class HomepageKontakController extends Controller
 
             $validated['background_image'] = $newImage;
 
+            // Hapus gambar lama hanya jika dikelola oleh storage Laravel.
             if (
                 $oldImage &&
                 str_starts_with($oldImage, 'homepage/') &&
@@ -90,9 +90,11 @@ class HomepageKontakController extends Controller
                 Storage::disk('public')->delete($oldImage);
             }
         } else {
+            // Pertahankan gambar lama jika tidak ada upload baru.
             unset($validated['background_image']);
         }
 
+        // Simpan perubahan tanpa membuat data awal baru.
         $kontak->fill($validated);
         $kontak->save();
 

@@ -113,14 +113,16 @@
                 <label for="profile_image">Gambar Profil</label>
 
                 @if ($aboutPage->profile_image)
-                    <div class="current-image">
-                        <p>Gambar yang tersimpan saat ini:</p>
-
+                    
+                    <div class="cms-current-image">
+                        <p class="cms-image-label">Gambar yang tersimpan saat ini:</p>
                         <img
                             src="{{ asset('storage/' . $aboutPage->profile_image) }}"
                             alt="Gambar profil perusahaan saat ini"
+                            class="cms-preview-image"
                         >
                     </div>
+
                 @endif
 
                 <input

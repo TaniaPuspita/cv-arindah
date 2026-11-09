@@ -1,3 +1,4 @@
+
 @extends('admin.layouts.app')
 
 @section('title', 'Pesan Masuk | CV Arindah')
@@ -7,98 +8,206 @@
 
 <style>
     .messages-page {
-        color: #193F6B;
+        --messages-primary: #0969D8;
+        --messages-navy: #193F6B;
+        --messages-muted: #7B8DA5;
+        --messages-border: #DCE5F0;
+
+        color: var(--messages-navy);
+        min-width: 0;
+    }
+
+    .messages-page *,
+    .messages-page *::before,
+    .messages-page *::after {
+        box-sizing: border-box;
     }
 
     .messages-page .messages-description {
-        color: #7B8DA5;
-        font-size: 0.9rem;
+        color: var(--messages-muted);
+        font-size: .875rem;
         line-height: 1.7;
     }
 
+    /* RINGKASAN PESAN */
+    .messages-page .messages-summary {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .messages-page .summary-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        min-height: 42px;
+        border: 1px solid var(--messages-border);
+        border-radius: 11px;
+        background: #fff;
+        color: #526782;
+        font-size: .84rem;
+    }
+
+    .messages-page .summary-badge strong {
+        color: var(--messages-navy);
+        font-weight: 700;
+    }
+
+    /* KARTU TABEL */
     .messages-page .messages-card {
+        min-width: 0;
         overflow: hidden;
-        border: 1px solid #E5EDF6;
+        border: 1px solid var(--messages-border);
         border-radius: 16px;
-        background: #FFFFFF;
-        box-shadow: 0 6px 24px rgba(27, 69, 109, 0.06);
+        background: #fff;
+        box-shadow: 0 6px 24px rgba(27, 69, 109, .06);
     }
 
     .messages-page .messages-card-header {
-        padding: 20px 24px;
-        border-bottom: 1px solid #E8EEF6;
-        background: #FFFFFF;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 22px 24px;
+        border-bottom: 1px solid var(--messages-border);
+        background: #fff;
     }
 
     .messages-page .messages-icon {
         display: inline-flex;
-        width: 44px;
-        height: 44px;
-        flex-shrink: 0;
+        width: 46px;
+        height: 46px;
+        flex: 0 0 46px;
         align-items: center;
         justify-content: center;
         border-radius: 12px;
         background: #EAF3FF;
-        color: #0969D8;
-        font-size: 20px;
+        color: var(--messages-primary);
+        font-size: 21px;
     }
 
-    .messages-page .messages-table {
-        margin-bottom: 0;
-        color: #193F6B;
-        font-size: 0.875rem;
-    }
-
-    .messages-page .messages-table thead th {
-        padding: 16px 18px;
-        background: #F5F8FC;
-        color: #526782;
-        font-size: 0.76rem;
+    .messages-page .messages-card-title {
+        margin: 0 0 4px;
+        color: var(--messages-navy);
+        font-size: 1.15rem;
         font-weight: 700;
-        white-space: nowrap;
-        border-bottom: 1px solid #DFE8F2;
     }
 
-    .messages-page .messages-table tbody td {
-        padding: 15px 18px;
-        border-bottom: 1px solid #EDF1F6;
+    /* PEMBUNGKUS TABEL RESPONSIF */
+    .messages-page .messages-table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* TABEL UTAMA */
+    .messages-page .messages-table {
+        width: 100%;
+        min-width: 880px;
+        margin: 0;
+        border: 1px solid var(--messages-border);
+        border-collapse: collapse;
+        border-spacing: 0;
+        color: var(--messages-navy);
+        font-size: .875rem;
+    }
+
+    /* GARIS HEADER DAN KOLOM */
+    .messages-page .messages-table thead th {
+        padding: 15px 16px;
+        border: 1px solid #D6E1EE;
+        background: #F3F7FC;
+        color: #526782;
+        font-size: .76rem;
+        font-weight: 700;
+        text-align: left;
         vertical-align: middle;
+        white-space: nowrap;
     }
 
-    .messages-page .messages-table tbody tr:last-child td {
-        border-bottom: 0;
+    /* GARIS SETIAP SEL DATA */
+    .messages-page .messages-table tbody td {
+        padding: 16px;
+        border: 1px solid #E0E7F0;
+        background: #fff;
+        vertical-align: middle;
+        transition: background-color .2s ease;
     }
 
-    .messages-page .messages-table tbody tr {
-        transition: background-color 0.2s ease;
+    /* WARNA BARIS SAAT DISOROT */
+    .messages-page .messages-table tbody tr:hover td {
+        background: #F5F9FF;
     }
 
-    .messages-page .messages-table tbody tr:hover {
-        background: #F8FBFF;
+    /* NOMOR */
+    .messages-page .number-cell {
+        width: 65px;
+        color: #657B95;
+        font-size: .82rem;
+        text-align: center;
+    }
+
+    /* PENGIRIM */
+    .messages-page .sender-cell {
+        min-width: 200px;
+        max-width: 280px;
     }
 
     .messages-page .sender-name {
-        color: #193F6B;
-        font-weight: 600;
+        display: block;
+        color: var(--messages-navy);
+        font-weight: 650;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
     }
 
     .messages-page .sender-email {
         display: block;
+        margin-top: 5px;
+        color: #8292A8;
+        font-size: .78rem;
+        line-height: 1.5;
+        overflow-wrap: anywhere;
+    }
+
+    /* SUBJEK */
+    .messages-page .subject-cell {
+        min-width: 140px;
+        max-width: 230px;
+        line-height: 1.6;
+        overflow-wrap: anywhere;
+    }
+
+    /* TANGGAL */
+    .messages-page .date-cell {
+        min-width: 125px;
+        white-space: nowrap;
+        line-height: 1.5;
+    }
+
+    .messages-page .date-time {
+        display: block;
         margin-top: 4px;
         color: #8292A8;
-        font-size: 0.78rem;
-        font-weight: 400;
-        overflow-wrap: anywhere;
+        font-size: .78rem;
+    }
+
+    /* STATUS PESAN */
+    .messages-page .status-cell {
+        min-width: 155px;
     }
 
     .messages-page .status-badge {
         display: inline-flex;
         align-items: center;
-        gap: 5px;
-        padding: 6px 10px;
+        justify-content: center;
+        gap: 6px;
+        padding: 7px 10px;
         border-radius: 999px;
-        font-size: 0.72rem;
-        font-weight: 600;
+        font-size: .72rem;
+        font-weight: 650;
         white-space: nowrap;
     }
 
@@ -112,6 +221,13 @@
         background: #FFF3D6;
     }
 
+    /* TOMBOL AKSI */
+    .messages-page .action-cell {
+        width: 150px;
+        min-width: 150px;
+        text-align: center !important;
+    }
+
     .messages-page .action-buttons {
         display: flex;
         align-items: center;
@@ -119,23 +235,34 @@
         gap: 7px;
     }
 
+    .messages-page .action-buttons form {
+        display: flex;
+        margin: 0;
+    }
+
     .messages-page .action-button {
         display: inline-flex;
         width: 36px;
         height: 36px;
-        flex-shrink: 0;
+        flex: 0 0 36px;
         align-items: center;
         justify-content: center;
         padding: 0;
         border: 1px solid;
         border-radius: 9px;
-        background: #FFFFFF;
+        background: #fff;
         font-size: 15px;
+        line-height: 1;
         text-decoration: none;
         cursor: pointer;
-        transition: background-color 0.2s ease,
-                    color 0.2s ease,
-                    border-color 0.2s ease;
+        transition: color .2s ease,
+                    background-color .2s ease,
+                    border-color .2s ease,
+                    transform .2s ease;
+    }
+
+    .messages-page .action-button:hover {
+        transform: translateY(-1px);
     }
 
     .messages-page .action-view {
@@ -144,7 +271,7 @@
     }
 
     .messages-page .action-view:hover {
-        color: #FFFFFF;
+        color: #fff;
         background: #0969D8;
         border-color: #0969D8;
     }
@@ -155,7 +282,7 @@
     }
 
     .messages-page .action-unread:hover {
-        color: #FFFFFF;
+        color: #fff;
         background: #B77908;
         border-color: #B77908;
     }
@@ -166,92 +293,163 @@
     }
 
     .messages-page .action-delete:hover {
-        color: #FFFFFF;
+        color: #fff;
         background: #DC3545;
         border-color: #DC3545;
     }
 
-    .messages-page .messages-summary {
+    .messages-page .action-button:focus-visible {
+        outline: 3px solid rgba(9, 105, 216, .2);
+        outline-offset: 2px;
+    }
+
+    /* PAGINATION */
+    .messages-page .messages-pagination {
         display: flex;
+        justify-content: space-between;
+        align-items: center;
         flex-wrap: wrap;
-        align-items: center;
-        gap: 10px;
-    }
-
-    .messages-page .summary-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        padding: 10px 14px;
-        border: 1px solid #E1EAF4;
-        border-radius: 11px;
-        background: #FFFFFF;
-        color: #526782;
-        font-size: 0.82rem;
-        font-weight: 500;
-    }
-
-    .messages-page .summary-badge strong {
-        color: #193F6B;
-        font-weight: 700;
-    }
-
-    .messages-page .empty-state {
-        padding: 60px 24px;
-        text-align: center;
-    }
-
-    .messages-page .empty-state-icon {
-        display: inline-flex;
-        width: 76px;
-        height: 76px;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 18px;
-        border-radius: 22px;
-        background: #EAF3FF;
-        color: #0969D8;
-        font-size: 32px;
+        gap: 14px;
+        padding: 18px 24px;
+        border-top: 1px solid var(--messages-border);
     }
 
     .messages-page .pagination {
-        margin-bottom: 0;
+        flex-wrap: wrap;
         gap: 4px;
+        margin: 0;
     }
 
     .messages-page .page-link {
+        border-color: var(--messages-border);
         border-radius: 8px;
-        border-color: #E1EAF4;
-        color: #0969D8;
+        color: var(--messages-primary);
     }
 
     .messages-page .page-item.active .page-link {
-        color: #FFFFFF;
-        background: #0969D8;
-        border-color: #0969D8;
+        color: #fff;
+        background: var(--messages-primary);
+        border-color: var(--messages-primary);
     }
 
     .messages-page .page-item.disabled .page-link {
         color: #A0AEC0;
     }
 
-    @media (max-width: 767.98px) {
+    /* KONDISI KOSONG */
+    .messages-page .empty-state {
+        padding: 56px 24px;
+        text-align: center;
+    }
+
+    .messages-page .empty-state-icon {
+        display: inline-flex;
+        width: 72px;
+        height: 72px;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+        border-radius: 20px;
+        background: #EAF3FF;
+        color: var(--messages-primary);
+        font-size: 30px;
+    }
+
+    /* TABLET */
+    @media (max-width: 991.98px) {
         .messages-page .messages-card-header {
+            padding: 20px;
+        }
+
+        .messages-page .messages-pagination {
+            padding: 16px 20px;
+        }
+    }
+
+    /* HP */
+    @media (max-width: 767.98px) {
+        .messages-page .messages-summary {
+            gap: 8px;
+        }
+
+        .messages-page .summary-badge {
+            padding: 9px 11px;
+            font-size: .78rem;
+        }
+
+        .messages-page .messages-card {
+            border-radius: 14px;
+        }
+
+        .messages-page .messages-card-header {
+            align-items: flex-start;
             padding: 16px;
         }
 
-        .messages-page .messages-table thead th,
-        .messages-page .messages-table tbody td {
-            padding: 12px;
+        .messages-page .messages-icon {
+            width: 40px;
+            height: 40px;
+            flex-basis: 40px;
+            font-size: 19px;
         }
 
-        .messages-page .action-buttons {
-            gap: 5px;
+        .messages-page .messages-card-title {
+            font-size: 1rem;
+        }
+
+        .messages-page .messages-description {
+            font-size: .81rem;
+        }
+
+        .messages-page .messages-table {
+            min-width: 820px;
+            font-size: .82rem;
+        }
+
+        .messages-page .messages-table thead th {
+            padding: 13px 14px;
+        }
+
+        .messages-page .messages-table tbody td {
+            padding: 14px;
         }
 
         .messages-page .action-button {
-            width: 33px;
-            height: 33px;
+            width: 34px;
+            height: 34px;
+            flex-basis: 34px;
+        }
+
+        .messages-page .messages-pagination {
+            align-items: flex-start;
+            padding: 16px;
+        }
+
+        .messages-page .empty-state {
+            padding: 42px 20px;
+        }
+    }
+
+    @media (max-width: 420px) {
+        .messages-page .summary-badge {
+            gap: 6px;
+            font-size: .74rem;
+        }
+
+        .messages-page .messages-card-header {
+            padding: 14px;
+        }
+
+        .messages-page .messages-pagination {
+            padding: 14px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .messages-page *,
+        .messages-page *::before,
+        .messages-page *::after {
+            transition: none !important;
         }
     }
 </style>
@@ -271,69 +469,61 @@
 
     {{-- RINGKASAN PESAN --}}
     <div class="messages-summary mb-4">
-
         <div class="summary-badge">
             <i class="bi bi-inbox text-primary"></i>
-            Total pesan:
+            <span>Total pesan:</span>
             <strong>{{ $messages->total() }}</strong>
         </div>
 
         <div class="summary-badge">
             <i class="bi bi-envelope-exclamation" style="color: #B77908;"></i>
-            Belum dibaca:
+            <span>Belum dibaca:</span>
             <strong>{{ $unreadCount }}</strong>
         </div>
-
     </div>
 
     {{-- KARTU DAFTAR PESAN --}}
     <section class="messages-card">
 
         <div class="messages-card-header">
-            <div class="d-flex align-items-center gap-3">
+            <div class="messages-icon">
+                <i class="bi bi-envelope-paper"></i>
+            </div>
 
-                <div class="messages-icon">
-                    <i class="bi bi-envelope-paper"></i>
-                </div>
+            <div class="min-w-0">
+                <h5 class="messages-card-title">Daftar Pesan Pengunjung</h5>
 
-                <div>
-                    <h5 class="fw-bold mb-1">Daftar Pesan Pengunjung</h5>
-
-                    <p class="messages-description mb-0">
-                        Lihat pesan, periksa status, dan kelola pesan yang masuk.
-                    </p>
-                </div>
-
+                <p class="messages-description mb-0">
+                    Lihat pesan, periksa status, dan kelola pesan yang masuk.
+                </p>
             </div>
         </div>
 
         @if($messages->count() > 0)
 
-            <div class="table-responsive">
+            <div class="messages-table-wrapper">
                 <table class="table messages-table align-middle">
-
                     <thead>
                         <tr>
-                            <th class="ps-4" style="width: 65px;">No.</th>
+                            <th class="number-cell">No.</th>
                             <th>Pengirim</th>
                             <th>Subjek</th>
                             <th>Tanggal</th>
                             <th>Status</th>
-                            <th class="text-center pe-4">Aksi</th>
+                            <th class="action-cell">Aksi</th>
                         </tr>
                     </thead>
 
                     <tbody>
                         @foreach($messages as $message)
-
                             <tr>
                                 {{-- NOMOR --}}
-                                <td class="ps-4">
+                                <td class="number-cell">
                                     {{ $messages->firstItem() + $loop->index }}
                                 </td>
 
                                 {{-- PENGIRIM --}}
-                                <td>
+                                <td class="sender-cell">
                                     <span class="sender-name">
                                         {{ $message->nama }}
                                     </span>
@@ -344,23 +534,21 @@
                                 </td>
 
                                 {{-- SUBJEK --}}
-                                <td>
+                                <td class="subject-cell">
                                     {{ ucfirst($message->subjek) }}
                                 </td>
 
                                 {{-- TANGGAL --}}
-                                <td>
-                                    <span class="text-nowrap">
-                                        {{ $message->created_at?->format('d/m/Y') ?? '-' }}
-                                    </span>
+                                <td class="date-cell">
+                                    {{ $message->created_at?->format('d/m/Y') ?? '-' }}
 
-                                    <small class="d-block sender-email">
+                                    <span class="date-time">
                                         {{ $message->created_at?->format('H:i') ?? '' }}
-                                    </small>
+                                    </span>
                                 </td>
 
                                 {{-- STATUS --}}
-                                <td>
+                                <td class="status-cell">
                                     @if($message->is_read)
                                         <span class="status-badge status-read">
                                             <i class="bi bi-check-circle-fill"></i>
@@ -375,7 +563,7 @@
                                 </td>
 
                                 {{-- AKSI --}}
-                                <td class="text-center pe-4">
+                                <td class="action-cell">
                                     <div class="action-buttons">
 
                                         {{-- LIHAT PESAN --}}
@@ -393,7 +581,6 @@
                                             <form
                                                 action="{{ route('admin.contact-messages.unread', $message->id) }}"
                                                 method="POST"
-                                                class="m-0"
                                                 onsubmit="return confirm('Tandai pesan ini sebagai belum dibaca?')"
                                             >
                                                 @csrf
@@ -414,7 +601,6 @@
                                         <form
                                             action="{{ route('admin.contact-messages.destroy', $message->id) }}"
                                             method="POST"
-                                            class="m-0"
                                             onsubmit="return confirm('Yakin ingin menghapus pesan ini?')"
                                         >
                                             @csrf
@@ -432,27 +618,21 @@
 
                                     </div>
                                 </td>
-
                             </tr>
-
                         @endforeach
                     </tbody>
-
                 </table>
             </div>
 
             {{-- PAGINATION --}}
             @if($messages->hasPages())
-                <div class="d-flex justify-content-between align-items-center
-                            flex-wrap gap-3 p-4 border-top">
-
+                <div class="messages-pagination">
                     <small class="messages-description">
                         Menampilkan {{ $messages->firstItem() }}–{{ $messages->lastItem() }}
                         dari {{ $messages->total() }} pesan
                     </small>
 
                     {{ $messages->links() }}
-
                 </div>
             @endif
 
@@ -460,7 +640,6 @@
 
             {{-- KONDISI BELUM ADA PESAN --}}
             <div class="empty-state">
-
                 <div class="empty-state-icon">
                     <i class="bi bi-inbox"></i>
                 </div>
@@ -471,7 +650,6 @@
                     Pesan yang dikirim melalui formulir kontak website
                     akan ditampilkan di halaman ini.
                 </p>
-
             </div>
 
         @endif

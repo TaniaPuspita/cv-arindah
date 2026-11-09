@@ -9,47 +9,25 @@ use Illuminate\Support\Facades\Storage;
 
 class ContactPageController extends Controller
 {
-    private function defaultContent(): array
-    {
-        return [
-            // Hero Kontak
-            'hero_label' => 'Kontak',
-            'hero_title' => 'Kami Siap Membantu Kebutuhan Anda',
-            'hero_description' => 'Jangan ragu untuk menghubungi kami. Tim kami siap memberikan informasi lebih lanjut mengenai produk dan layanan yang tersedia.',
-
-            // Informasi Kontak
-            'contact_section_title' => 'Cara Menghubungi Kami',
-            'contact_email' => 'cv.arindah2016@gmail.com',
-            'contact_phone' => '+6285100821243',
-            'contact_address' => 'Jalan Dewaratwati Nomor 23, Mengwitani, Mengwi, Badung, Bali',
-
-            // Pengaturan Formulir Kirim Pesan
-            'form_label' => 'Kirim Pesan',
-            'form_title' => 'Kirim Pesan / Permintaan Informasi',
-            'form_description' => 'Lengkapi formulir di bawah ini untuk menyampaikan pertanyaan atau kebutuhan Anda.',
-            'form_button_text' => 'Kirim Pesan',
-
-            // Lokasi Kami
-            'location_title' => 'Temukan Alamat Kami',
-            'location_address' => 'Jalan Dewaratwati Nomor 23, Mengwitani, Mengwi, Badung, Bali',
-            'location_note' => 'Untuk saat ini, lokasi belum tersedia di Google Maps. Anda dapat mencari alamat tersebut secara manual.',
-            'maps_url' => 'https://www.google.com/maps/search/?api=1&query=Jalan+Dewaratwati+Nomor+23+Mengwitani+Mengwi+Badung+Bali',
-
-            // CTA Kontak
-            'cta_title' => 'Butuh Produk atau Layanan untuk Kebutuhan Anda?',
-            'cta_description' => 'Hubungi tim kami untuk mendapatkan informasi lebih lanjut mengenai produk dan layanan CV Arindah.',
-            'cta_phone' => '+6285100821243',
-        ];
-    }
-
+    /**
+     * Mengambil data halaman Kontak yang sudah tersimpan di database.
+     */
     private function getContactPage(): ContactPage
     {
-        return ContactPage::firstOrCreate(
-            ['id' => 1],
-            $this->defaultContent()
+        $contactPage = ContactPage::query()->first();
+
+        abort_if(
+            !$contactPage,
+            500,
+            'Data halaman Kontak belum tersedia. Jalankan ContactPageSeeder terlebih dahulu.'
         );
+
+        return $contactPage;
     }
 
+    /**
+     * Daftar bagian CMS halaman Kontak dan field yang dapat diedit.
+     */
     private function sectionFields(): array
     {
         return [
@@ -106,6 +84,9 @@ class ContactPageController extends Controller
         ];
     }
 
+    /**
+     * Menampilkan halaman edit untuk bagian CMS Kontak.
+     */
     public function editSection(string $section)
     {
         $sections = $this->sectionFields();
@@ -115,13 +96,15 @@ class ContactPageController extends Controller
         $contactPage = $this->getContactPage();
         $sectionData = $sections[$section];
 
-        return view('admin.contact-page.edit-section', compact(
-            'contactPage',
-            'section',
-            'sectionData'
-        ));
+        return view(
+            'admin.contact-page.edit-section',
+            compact('contactPage', 'section', 'sectionData')
+        );
     }
 
+    /**
+     * Memvalidasi dan menyimpan perubahan CMS halaman Kontak.
+     */
     public function updateSection(Request $request, string $section)
     {
         $sections = $this->sectionFields();
@@ -134,9 +117,10 @@ class ContactPageController extends Controller
         /*
          * VALIDASI DATA
          */
+
         $rules = [];
 
-        // Field yang menggunakan teks pendek
+        // Field yang menggunakan teks pendek.
         $shortTextFields = [
             'hero_label',
             'hero_title',
@@ -152,7 +136,7 @@ class ContactPageController extends Controller
             'cta_phone',
         ];
 
-        // Field yang menggunakan teks panjang
+        // Field yang menggunakan teks panjang.
         $longTextFields = [
             'hero_description',
             'contact_address',
@@ -164,22 +148,42 @@ class ContactPageController extends Controller
 
         foreach ($fields as $field) {
             if (str_ends_with($field, '_image')) {
-                $rules[$field] = ['nullable', 'image', 'max:5120'];
+                $rules[$field] = [
+                    'nullable',
+                    'image',
+                    'max:5120',
+                ];
             } elseif (in_array($field, $shortTextFields, true)) {
-                $rules[$field] = ['nullable', 'string', 'max:255'];
+                $rules[$field] = [
+                    'nullable',
+                    'string',
+                    'max:255',
+                ];
             } elseif (in_array($field, $longTextFields, true)) {
-                $rules[$field] = ['nullable', 'string', 'max:5000'];
+                $rules[$field] = [
+                    'nullable',
+                    'string',
+                    'max:5000',
+                ];
             }
         }
 
-        // Validasi khusus email
+        // Validasi khusus email.
         if (in_array('contact_email', $fields, true)) {
-            $rules['contact_email'] = ['nullable', 'email', 'max:255'];
+            $rules['contact_email'] = [
+                'nullable',
+                'email',
+                'max:255',
+            ];
         }
 
-        // Validasi khusus URL Google Maps
+        // Validasi khusus URL Google Maps.
         if (in_array('maps_url', $fields, true)) {
-            $rules['maps_url'] = ['nullable', 'url', 'max:2000'];
+            $rules['maps_url'] = [
+                'nullable',
+                'url',
+                'max:2000',
+            ];
         }
 
         $validated = $request->validate($rules);
@@ -187,6 +191,7 @@ class ContactPageController extends Controller
         /*
          * PROSES UPLOAD GAMBAR
          */
+
         foreach ($fields as $field) {
             if (!str_ends_with($field, '_image')) {
                 continue;
@@ -195,13 +200,19 @@ class ContactPageController extends Controller
             if ($request->hasFile($field)) {
                 $oldImage = $contactPage->{$field};
 
-                $validated[$field] = $request->file($field)
+                $validated[$field] = $request
+                    ->file($field)
                     ->store('contact-page', 'public');
 
-                if ($oldImage && Storage::disk('public')->exists($oldImage)) {
+                // Hapus gambar lama setelah gambar baru tersimpan.
+                if (
+                    $oldImage &&
+                    Storage::disk('public')->exists($oldImage)
+                ) {
                     Storage::disk('public')->delete($oldImage);
                 }
             } else {
+                // Jangan mengubah gambar jika tidak ada file baru.
                 unset($validated[$field]);
             }
         }
@@ -209,13 +220,16 @@ class ContactPageController extends Controller
         /*
          * SIMPAN PERUBAHAN
          */
+
         $contactPage->update($validated);
 
         return redirect()
             ->route('admin.contact-page.section.edit', $section)
             ->with(
                 'success',
-                'Konten ' . $sections[$section]['title'] . ' berhasil diperbarui.'
+                'Konten ' .
+                $sections[$section]['title'] .
+                ' berhasil diperbarui.'
             );
     }
 }

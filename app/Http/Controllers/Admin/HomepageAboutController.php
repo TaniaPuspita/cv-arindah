@@ -2,9 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-// =========================================================
-// IMPORT CONTROLLER, MODEL, REQUEST, DAN STORAGE
-// =========================================================
 use App\Http\Controllers\Controller;
 use App\Models\HomepageAbout;
 use Illuminate\Http\Request;
@@ -12,44 +9,36 @@ use Illuminate\Support\Facades\Storage;
 
 class HomepageAboutController extends Controller
 {
-    // =====================================================
-    // 1. MENAMPILKAN HALAMAN CMS TENTANG KAMI
-    // =====================================================
+    /**
+     * Menampilkan form CMS Tentang Kami di Beranda.
+     */
     public function edit()
     {
-        // Ambil data Tentang Kami yang sudah tersimpan
         $about = HomepageAbout::first();
 
-        // Jika belum ada data, buat data awal
         if (!$about) {
-            $about = HomepageAbout::create([
-                'label' => 'TENTANG KAMI',
-                'title' => 'MENGENAL CV ARINDAH',
-                'paragraph_one' => 'CV Arindah bergerak dalam berbagai bidang perdagangan eceran, termasuk komputer dan perlengkapan, peralatan listrik, alat tulis, furniture, audio dan video, serta kebutuhan laboratorium dan kesehatan.',
-                'paragraph_two' => 'Selain itu, CV Arindah juga memiliki aktivitas di bidang teknologi informasi dan jasa komputer lainnya.',
-                'category_one' => 'Komputer & Perlengkapan',
-                'category_two' => 'Elektronik & Furniture',
-                'category_three' => 'Teknologi Informasi',
-            ]);
+            abort(
+                500,
+                'Data Tentang Kami di Beranda belum tersedia. Jalankan HomepageAboutSeeder terlebih dahulu.'
+            );
         }
 
-        // Kirim data ke halaman form CMS
         return view('admin.homepage-about.edit', compact('about'));
     }
 
-    // =====================================================
-    // 2. MENYIMPAN PERUBAHAN KONTEN TENTANG KAMI
-    // =====================================================
+    /**
+     * Menyimpan perubahan konten Tentang Kami di Beranda.
+     */
     public function update(Request $request)
     {
-        // Validasi data dari form CMS
+        // Validasi data dari form CMS.
         $validated = $request->validate([
             'label' => ['required', 'string', 'max:255'],
             'title' => ['required', 'string', 'max:255'],
             'paragraph_one' => ['nullable', 'string', 'max:5000'],
             'paragraph_two' => ['nullable', 'string', 'max:5000'],
 
-            // Gambar opsional, maksimal 2 MB
+            // Gambar opsional, maksimal 2 MB.
             'image' => [
                 'nullable',
                 'image',
@@ -62,47 +51,50 @@ class HomepageAboutController extends Controller
             'category_three' => ['required', 'string', 'max:255'],
         ]);
 
-        // Ambil data yang akan diperbarui
+        // Ambil data yang sudah disediakan oleh Seeder.
         $about = HomepageAbout::first();
 
-        // Siapkan data baru jika belum ada
         if (!$about) {
-            $about = new HomepageAbout();
+            abort(
+                500,
+                'Data Tentang Kami di Beranda belum tersedia. Jalankan HomepageAboutSeeder terlebih dahulu.'
+            );
         }
 
-        // ================================================
-        // 3. MENGELOLA UPLOAD GAMBAR
-        // ================================================
+        // Proses upload gambar baru jika ada.
         if ($request->hasFile('image')) {
-            // Simpan lokasi gambar lama
             $oldImage = $about->image;
 
-            // Simpan gambar baru ke storage/app/public/homepage
             $newImage = $request->file('image')
                 ->store('homepage', 'public');
 
-            // Simpan lokasi gambar baru ke database
+            if (!$newImage) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'image' => 'Gambar gagal disimpan. Silakan coba lagi.',
+                    ]);
+            }
+
             $validated['image'] = $newImage;
 
-            // Hapus gambar lama setelah gambar baru tersimpan
+            // Hapus gambar lama hanya jika dikelola oleh storage Laravel.
             if (
                 $oldImage &&
+                str_starts_with($oldImage, 'homepage/') &&
                 Storage::disk('public')->exists($oldImage)
             ) {
                 Storage::disk('public')->delete($oldImage);
             }
         } else {
-            // Pertahankan gambar lama jika tidak mengganti gambar
+            // Pertahankan gambar lama jika tidak ada upload baru.
             unset($validated['image']);
         }
 
-        // ================================================
-        // 4. SIMPAN DATA KE DATABASE
-        // ================================================
+        // Simpan perubahan tanpa membuat data awal baru.
         $about->fill($validated);
         $about->save();
 
-        // Kembali ke form dengan pesan berhasil
         return redirect()
             ->route('admin.homepage-about.edit')
             ->with(

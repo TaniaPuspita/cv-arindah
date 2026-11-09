@@ -19,14 +19,10 @@ class HomepageHeroController extends Controller
         $hero = HomepageHero::first();
 
         if (!$hero) {
-            $hero = HomepageHero::create([
-                'label' => 'CV ARINDAH',
-                'title' => 'Solusi Produk & Kebutuhan Teknologi Bisnis Anda',
-                'description' => '',
-                'image' => null,
-                'button_text' => 'Lihat Produk',
-                'button_link' => '/produk-layanan',
-            ]);
+            abort(
+                500,
+                'Data Hero belum tersedia. Jalankan HomepageHeroSeeder terlebih dahulu.'
+            );
         }
 
         return view('admin.homepage-hero.edit', compact('hero'));
@@ -56,10 +52,14 @@ class HomepageHeroController extends Controller
             ],
         ]);
 
+        // Ambil data Hero yang sudah disediakan oleh Seeder.
         $hero = HomepageHero::first();
 
         if (!$hero) {
-            $hero = new HomepageHero();
+            abort(
+                500,
+                'Data Hero belum tersedia. Jalankan HomepageHeroSeeder terlebih dahulu.'
+            );
         }
 
         // Simpan gambar baru jika admin mengunggahnya.
@@ -69,10 +69,21 @@ class HomepageHeroController extends Controller
             $newImage = $request->file('image')
                 ->store('homepage', 'public');
 
+            if (!$newImage) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'image' => 'Gambar gagal disimpan. Silakan coba lagi.',
+                    ]);
+            }
+
             $validated['image'] = $newImage;
 
             // Hapus gambar lama setelah gambar baru berhasil disimpan.
-            if ($oldImage && Storage::disk('public')->exists($oldImage)) {
+            if (
+                $oldImage &&
+                Storage::disk('public')->exists($oldImage)
+            ) {
                 Storage::disk('public')->delete($oldImage);
             }
         } else {
@@ -80,10 +91,11 @@ class HomepageHeroController extends Controller
             unset($validated['image']);
         }
 
+        // Simpan perubahan konten Hero.
         $hero->fill($validated);
         $hero->save();
 
-        // Catat aktivitas setelah perubahan Hero berhasil disimpan.
+        // Catat aktivitas setelah perubahan berhasil disimpan.
         AdminActivityLog::create([
             'user_id' => Auth::id(),
             'user_name' => Auth::user()?->name ?? 'Administrator',

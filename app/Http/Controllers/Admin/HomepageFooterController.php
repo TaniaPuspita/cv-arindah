@@ -12,31 +12,27 @@ use Illuminate\Support\Facades\Storage;
 class HomepageFooterController extends Controller
 {
     /**
+     * Mengambil data Footer yang sudah tersedia di database.
+     */
+    private function getFooter(): HomepageFooter
+    {
+        $footer = HomepageFooter::query()->first();
+
+        abort_if(
+            !$footer,
+            500,
+            'Data footer belum tersedia. Jalankan HomepageFooterSeeder terlebih dahulu.'
+        );
+
+        return $footer;
+    }
+
+    /**
      * Menampilkan halaman CMS Footer.
      */
     public function edit()
     {
-        $footer = HomepageFooter::first();
-
-        if (!$footer) {
-            $footer = HomepageFooter::create([
-                'company_name' => 'CV Arindah',
-                'description' => 'Menyediakan berbagai kebutuhan produk dan perlengkapan untuk mendukung kebutuhan pelanggan.',
-                'tags' => ['Teknologi', 'Produk', 'Solusi'],
-                'phone' => '+62 851-0082-1243',
-                'email' => 'cv.arindah2016@gmail.com',
-                'address' => 'Jalan Dewarawati Nomor 23, Mengwitani, Mengwi, Badung, Bali',
-                'navigation' => [
-                    ['route' => 'home', 'label' => 'Beranda'],
-                    ['route' => 'tentang', 'label' => 'Tentang Kami'],
-                    ['route' => 'produk', 'label' => 'Produk & Layanan'],
-                    ['route' => 'galeri', 'label' => 'Galeri'],
-                    ['route' => 'kontak', 'label' => 'Kontak'],
-                ],
-                'copyright_text' => 'CV Arindah. All rights reserved.',
-                'location_text' => 'Badung, Bali, Indonesia',
-            ]);
-        }
+        $footer = $this->getFooter();
 
         return view('admin.homepage-footer.edit', compact('footer'));
     }
@@ -46,37 +42,53 @@ class HomepageFooterController extends Controller
      */
     public function update(Request $request)
     {
-        $footer = HomepageFooter::first();
-
-        if (!$footer) {
-            return redirect()
-                ->route('admin.homepage-footer.edit')
-                ->with(
-                    'error',
-                    'Data footer belum tersedia. Silakan buka halaman CMS Footer terlebih dahulu.'
-                );
-        }
+        $footer = $this->getFooter();
 
         // Validasi data form.
         $validated = $request->validate([
-            'company_name' => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-
+            'company_name' => [
+                'required',
+                'string',
+                'max:255',
+            ],
+            'description' => [
+                'nullable',
+                'string',
+            ],
             'logo' => [
                 'nullable',
                 'image',
                 'mimes:jpg,jpeg,png,webp',
                 'max:2048',
             ],
-
-            'tags' => ['nullable', 'array'],
-            'tags.*' => ['nullable', 'string', 'max:100'],
-
-            'phone' => ['nullable', 'string', 'max:50'],
-            'email' => ['nullable', 'email', 'max:255'],
-            'address' => ['nullable', 'string'],
-
-            'navigation' => ['required', 'array', 'size:5'],
+            'tags' => [
+                'nullable',
+                'array',
+            ],
+            'tags.*' => [
+                'nullable',
+                'string',
+                'max:100',
+            ],
+            'phone' => [
+                'nullable',
+                'string',
+                'max:50',
+            ],
+            'email' => [
+                'nullable',
+                'email',
+                'max:255',
+            ],
+            'address' => [
+                'nullable',
+                'string',
+            ],
+            'navigation' => [
+                'required',
+                'array',
+                'size:5',
+            ],
             'navigation.*.label' => [
                 'required',
                 'string',
@@ -86,7 +98,6 @@ class HomepageFooterController extends Controller
                 'required',
                 'in:home,tentang,produk,galeri,kontak',
             ],
-
             'copyright_text' => [
                 'nullable',
                 'string',
@@ -116,24 +127,37 @@ class HomepageFooterController extends Controller
             $validated['navigation']
         );
 
-        // Upload logo baru jika ada.
+        // Simpan logo baru jika ada.
+        $oldLogo = $footer->logo;
+        $newLogo = null;
+
         if ($request->hasFile('logo')) {
             $newLogo = $request->file('logo')
                 ->store('homepage-footer', 'public');
 
-            if ($newLogo) {
-                // Hapus logo lama setelah logo baru berhasil diunggah.
-                if ($footer->logo) {
-                    Storage::disk('public')->delete($footer->logo);
-                }
-
-                $validated['logo'] = $newLogo;
+            if ($newLogo === false) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'logo' => 'Logo gagal diunggah. Silakan coba lagi.',
+                    ]);
             }
+
+            $validated['logo'] = $newLogo;
         }
 
         // Simpan perubahan Footer.
         $footer->fill($validated);
         $footer->save();
+
+        // Hapus logo lama setelah logo baru berhasil disimpan.
+        if (
+            $newLogo !== null &&
+            $oldLogo &&
+            $oldLogo !== $newLogo
+        ) {
+            Storage::disk('public')->delete($oldLogo);
+        }
 
         // Catat aktivitas admin setelah data berhasil disimpan.
         AdminActivityLog::create([

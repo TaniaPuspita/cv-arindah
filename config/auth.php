@@ -4,6 +4,8 @@ use App\Models\User;
 
 return [
 
+    'admin_email' => env('ADMIN_EMAIL', 'admin@cvarindah.com'),
+
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults

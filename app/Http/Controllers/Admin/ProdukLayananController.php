@@ -3,52 +3,33 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ProdukLayananCategory;
 use App\Models\ProdukLayananHero;
+use App\Models\ProdukLayananService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use App\Models\ProdukLayananCategory;
-use Illuminate\Support\Str;
-use App\Models\ProdukLayananService;
 
 class ProdukLayananController extends Controller
 {
     /**
-     * Nilai awal Hero Produk & Layanan.
-     */
-    private function defaultContent(): array
-    {
-        return [
-            'label' => 'PRODUK & LAYANAN',
-            'title' => 'Solusi untuk Mendukung Berbagai Kebutuhan Anda',
-            'description' => 'CV Arindah menyediakan layanan yang mendukung kebutuhan pelanggan dalam memperoleh berbagai produk dan perlengkapan secara praktis, cepat, dan terpercaya.',
-            'image' => null,
-            'button_text' => 'Lihat Produk',
-            'button_link' => '#produk',
-        ];
-    }
-
-    /**
-     * Menampilkan form CMS Hero.
+     * Menampilkan form CMS Hero Produk & Layanan.
      */
     public function editHero()
     {
-        $hero = ProdukLayananHero::firstOrCreate(
-            [],
-            $this->defaultContent()
-        );
+        $hero = ProdukLayananHero::query()->firstOrFail();
 
-        return view('admin.produk-layanan.hero.edit', compact('hero'));
+        return view(
+            'admin.produk-layanan.hero.edit',
+            compact('hero')
+        );
     }
 
     /**
-     * Menyimpan perubahan Hero.
+     * Menyimpan perubahan Hero Produk & Layanan.
      */
     public function updateHero(Request $request)
     {
-        $hero = ProdukLayananHero::firstOrCreate(
-            [],
-            $this->defaultContent()
-        );
+        $hero = ProdukLayananHero::query()->firstOrFail();
 
         $validated = $request->validate([
             'label' => 'required|string|max:255',
@@ -68,7 +49,7 @@ class ProdukLayananController extends Controller
             $newImage = $request->file('image')
                 ->store('produk-layanan', 'public');
 
-            if ($newImage === false) {
+            if (!$newImage) {
                 return back()
                     ->withInput()
                     ->withErrors([
@@ -79,31 +60,38 @@ class ProdukLayananController extends Controller
             $oldImage = $hero->image;
             $validated['image'] = $newImage;
 
+            $hero->fill($validated);
+            $hero->save();
+
             if (
                 $oldImage &&
+                $oldImage !== $newImage &&
                 Storage::disk('public')->exists($oldImage)
             ) {
                 Storage::disk('public')->delete($oldImage);
             }
         } else {
             unset($validated['image']);
-        }
 
-        $hero->fill($validated);
-        $hero->save();
+            $hero->fill($validated);
+            $hero->save();
+        }
 
         return redirect()
             ->route('admin.produk-layanan.hero.edit')
-            ->with('success', 'Hero Produk & Layanan berhasil diperbarui!');
+            ->with(
+                'success',
+                'Hero Produk & Layanan berhasil diperbarui!'
+            );
     }
 
-    
     /**
      * Menampilkan daftar kategori produk.
      */
     public function indexCategories()
     {
-        $categories = ProdukLayananCategory::orderBy('sort_order')
+        $categories = ProdukLayananCategory::query()
+            ->orderBy('sort_order')
             ->orderBy('id')
             ->paginate(10);
 
@@ -136,8 +124,18 @@ class ProdukLayananController extends Controller
         ]);
 
         if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')
+            $newImage = $request->file('image')
                 ->store('produk-layanan/categories', 'public');
+
+            if (!$newImage) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'image' => 'Gambar gagal disimpan. Silakan coba lagi.',
+                    ]);
+            }
+
+            $validated['image'] = $newImage;
         }
 
         $validated['is_active'] = $request->boolean('is_active');
@@ -146,7 +144,10 @@ class ProdukLayananController extends Controller
 
         return redirect()
             ->route('admin.produk-layanan.categories.index')
-            ->with('success', 'Kategori produk berhasil ditambahkan!');
+            ->with(
+                'success',
+                'Kategori produk berhasil ditambahkan!'
+            );
     }
 
     /**
@@ -180,12 +181,24 @@ class ProdukLayananController extends Controller
             $newImage = $request->file('image')
                 ->store('produk-layanan/categories', 'public');
 
-            if ($category->image) {
-                \Illuminate\Support\Facades\Storage::disk('public')
-                    ->delete($category->image);
+            if (!$newImage) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'image' => 'Gambar gagal disimpan. Silakan coba lagi.',
+                    ]);
             }
 
+            $oldImage = $category->image;
             $validated['image'] = $newImage;
+
+            if (
+                $oldImage &&
+                $oldImage !== $newImage &&
+                Storage::disk('public')->exists($oldImage)
+            ) {
+                Storage::disk('public')->delete($oldImage);
+            }
         } else {
             unset($validated['image']);
         }
@@ -196,7 +209,10 @@ class ProdukLayananController extends Controller
 
         return redirect()
             ->route('admin.produk-layanan.categories.index')
-            ->with('success', 'Kategori produk berhasil diperbarui!');
+            ->with(
+                'success',
+                'Kategori produk berhasil diperbarui!'
+            );
     }
 
     /**
@@ -204,19 +220,23 @@ class ProdukLayananController extends Controller
      */
     public function destroyCategory(ProdukLayananCategory $category)
     {
-        if ($category->image) {
-            \Illuminate\Support\Facades\Storage::disk('public')
-                ->delete($category->image);
+        if (
+            $category->image &&
+            Storage::disk('public')->exists($category->image)
+        ) {
+            Storage::disk('public')->delete($category->image);
         }
 
         $category->delete();
 
         return redirect()
             ->route('admin.produk-layanan.categories.index')
-            ->with('success', 'Kategori produk berhasil dihapus!');
+            ->with(
+                'success',
+                'Kategori produk berhasil dihapus!'
+            );
     }
 
-    
     /**
      * Menampilkan halaman edit section Produk, Layanan, atau CTA.
      */
@@ -227,7 +247,6 @@ class ProdukLayananController extends Controller
             404
         );
 
-        // View section yang sudah disiapkan di project.
         $views = [
             'produk' => 'admin.produk-layanan.produk.edit',
             'layanan' => 'admin.produk-layanan.layanan.edit',
@@ -242,8 +261,8 @@ class ProdukLayananController extends Controller
     /**
      * Memproses penyimpanan section.
      *
-     * Implementasi penyimpanan disesuaikan setelah
-     * model dan field untuk masing-masing section dipastikan.
+     * Struktur penyimpanan section tetap menunggu
+     * model dan field masing-masing dipastikan.
      */
     public function updateSection(Request $request, string $section)
     {
@@ -258,92 +277,73 @@ class ProdukLayananController extends Controller
         );
     }
 
-    
-/**
- * Menampilkan form CMS Layanan Kami.
- */
-public function editLayanan()
-{
-    $layanan = ProdukLayananService::firstOrCreate(
-        [],
-        [
-            'label' => 'LAYANAN KAMI',
-            'title' => 'Teknologi Informasi & Jasa Komputer',
-            'description' => 'CV Arindah menyediakan layanan di bidang teknologi informasi dan jasa komputer untuk mendukung kebutuhan teknologi dan operasional pelanggan.',
-            'service_1' => 'Pengadaan Perangkat Komputer & Jaringan',
-            'service_2' => 'Kebutuhan Teknologi',
-            'service_3' => 'Solusi Kebutuhan Usaha & Operasional',
-        ]
-    );
+    /**
+     * Menampilkan form CMS Layanan Kami.
+     */
+    public function editLayanan()
+    {
+        $layanan = ProdukLayananService::query()->firstOrFail();
 
-    return view(
-        'admin.produk-layanan.layanan.edit',
-        compact('layanan')
-    );
-}
-
-/**
- * Menyimpan perubahan CMS Layanan Kami.
- */
-public function updateLayanan(Request $request)
-{
-    $layanan = ProdukLayananService::firstOrCreate(
-        [],
-        [
-            'label' => 'LAYANAN KAMI',
-            'title' => 'Teknologi Informasi & Jasa Komputer',
-            'description' => 'CV Arindah menyediakan layanan di bidang teknologi informasi dan jasa komputer untuk mendukung kebutuhan teknologi dan operasional pelanggan.',
-            'service_1' => 'Pengadaan Perangkat Komputer & Jaringan',
-            'service_2' => 'Kebutuhan Teknologi',
-            'service_3' => 'Solusi Kebutuhan Usaha & Operasional',
-        ]
-    );
-
-    $validated = $request->validate([
-        'label' => 'required|string|max:100',
-        'title' => 'required|string|max:255',
-        'description' => 'required|string|max:3000',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,avif|max:2048',
-        'service_1' => 'required|string|max:255',
-        'service_2' => 'required|string|max:255',
-        'service_3' => 'required|string|max:255',
-    ]);
-
-    if ($request->hasFile('image')) {
-        $newImage = $request->file('image')
-            ->store('produk-layanan', 'public');
-
-        if (!$newImage) {
-            return back()
-                ->withInput()
-                ->withErrors([
-                    'image' => 'Gambar gagal disimpan. Silakan coba lagi.',
-                ]);
-        }
-
-        $oldImage = $layanan->image;
-
-        $validated['image'] = $newImage;
-
-        if (
-            $oldImage &&
-            \Illuminate\Support\Facades\Storage::disk('public')
-                ->exists($oldImage)
-        ) {
-            \Illuminate\Support\Facades\Storage::disk('public')
-                ->delete($oldImage);
-        }
-    } else {
-        unset($validated['image']);
+        return view(
+            'admin.produk-layanan.layanan.edit',
+            compact('layanan')
+        );
     }
 
-    $layanan->update($validated);
+    /**
+     * Menyimpan perubahan CMS Layanan Kami.
+     */
+    public function updateLayanan(Request $request)
+    {
+        $layanan = ProdukLayananService::query()->firstOrFail();
 
-    return redirect()
-        ->route('admin.produk-layanan.layanan.edit')
-        ->with('success', 'Layanan Kami berhasil diperbarui!');
-}
+        $validated = $request->validate([
+            'label' => 'required|string|max:100',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:3000',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png,webp,avif|max:2048',
+            'service_1' => 'required|string|max:255',
+            'service_2' => 'required|string|max:255',
+            'service_3' => 'required|string|max:255',
+        ]);
 
+        if ($request->hasFile('image')) {
+            $newImage = $request->file('image')
+                ->store('produk-layanan', 'public');
 
+            if (!$newImage) {
+                return back()
+                    ->withInput()
+                    ->withErrors([
+                        'image' => 'Gambar gagal disimpan. Silakan coba lagi.',
+                    ]);
+            }
 
+            $oldImage = $layanan->image;
+            $validated['image'] = $newImage;
+
+            $layanan->fill($validated);
+            $layanan->save();
+
+            if (
+                $oldImage &&
+                $oldImage !== $newImage &&
+                Storage::disk('public')->exists($oldImage)
+            ) {
+                Storage::disk('public')->delete($oldImage);
+            }
+        } else {
+            unset($validated['image']);
+
+            $layanan->fill($validated);
+            $layanan->save();
+        }
+
+        return redirect()
+            ->route('admin.produk-layanan.layanan.edit')
+            ->with(
+                'success',
+                'Layanan Kami berhasil diperbarui!'
+            );
+    }
 }

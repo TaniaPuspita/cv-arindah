@@ -2408,15 +2408,14 @@ input[name="icon"]:checked + .service-icon-option {
 .cms-preview-image {
     display: block;
     width: 100%;
-    max-width: 380px;
-    max-height: 240px;
-    object-fit: cover;
+    max-width: 360px;
+    height: 220px;
+    object-fit: contain;
     object-position: center;
     border: 1px solid #e2eaf3;
     border-radius: 12px;
-    background: #f3f8fe;
+    background: #f8fafd;
 }
-
 /* Tombol aksi rata kiri */
 .cms-form-actions {
     display: flex;
@@ -2510,17 +2509,22 @@ input[name="icon"]:checked + .service-icon-option {
     margin: 8px 0 32px;
 }
 
+
+/* Preview gambar Profil Perusahaan CMS Tentang Kami */
 .current-image img {
     display: block;
     width: 100%;
-    max-width: 320px;
-    max-height: 220px;
-    margin: 10px 0 16px;
-    border-radius: 12px;
+    max-width: 380px;
+    max-height: 240px;
+    height: auto;
+    margin: 0;
     object-fit: contain;
-    object-position: left center;
-    background: #f9fafb;
+    object-position: center;
+    border: 1px solid #e2eaf3;
+    border-radius: 12px;
+    background: #f8fafd;
 }
+
 
 @media (max-width: 768px) {
     .category-detail-tabs {
@@ -4078,3 +4082,80 @@ textarea {
     display: flex;
     flex-direction: column;
 }
+
+
+/* =========================================================
+   PREVIEW GAMBAR CMS CTA PRODUK & LAYANAN
+   Khusus halaman CTA agar tidak mengganggu CMS lainnya
+========================================================= */
+
+.current-image img.cta-image-thumbnail {
+    display: block;
+    width: 320px;
+    max-width: 100%;
+    height: 220px;
+    max-height: 220px;
+    margin: 0;
+    object-fit: cover;
+    object-position: center;
+    border: 1px solid #e2eaf3;
+    border-radius: 10px;
+    background: #f8fafc;
+    box-sizing: border-box;
+}
+
+.current-image #image-preview {
+    display: block;
+    width: 320px;
+    max-width: 100%;
+    height: 220px;
+    max-height: 220px;
+    margin: 0;
+    object-fit: cover;
+    object-position: center;
+    border: 1px solid #e2eaf3;
+    border-radius: 10px;
+    background: #f8fafc;
+    box-sizing: border-box;
+}
+
+@media (max-width: 576px) {
+    .current-image img.cta-image-thumbnail,
+    .current-image #image-preview {
+        width: 100%;
+        height: 200px;
+        max-height: 200px;
+    }
+}
+
+
+/* Perbaikan overlay sidebar admin */
+.sidebar-overlay {
+    display: none;
+    pointer-events: none;
+}
+
+@media (max-width: 760px) {
+    .sidebar-overlay {
+        display: none;
+        pointer-events: none;
+    }
+
+    .sidebar-overlay.is-visible {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 1040;
+        background: rgba(15, 31, 51, 0.45);
+        pointer-events: auto;
+    }
+
+    #adminSidebar {
+        z-index: 1050;
+    }
+
+    #adminSidebar.is-open {
+        pointer-events: auto;
+    }
+}
+
