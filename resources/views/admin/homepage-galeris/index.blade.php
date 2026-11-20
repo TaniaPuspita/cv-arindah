@@ -1,4 +1,7 @@
 @extends('admin.layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/homepage-galeris/index.css') }}">
+@endpush
 
 @section('title', 'CMS Galeri')
 @section('page-title', 'CMS Beranda')
@@ -60,14 +63,18 @@
                             </td>
 
                             <td>
-                                <img
-                                    src="{{ str_starts_with($galeri->image, 'images/')
+                                @php
+                                    $thumbnailUrl = str_starts_with($galeri->image, 'images/')
                                         ? asset($galeri->image)
-                                        : asset('storage/' . $galeri->image) }}"
-                                    alt="{{ $galeri->alt_text ?: $galeri->title }}"
-                                    style="width:100px;height:65px;object-fit:cover"
-                                    class="rounded-3 border"
-                                >
+                                        : asset('storage/' . $galeri->image);
+                                @endphp
+                                <div class="gallery-thumbnail-preview" style="--gallery-thumbnail-image: url('{{ $thumbnailUrl }}')">
+                                    <img
+                                        src="{{ $thumbnailUrl }}"
+                                        alt="{{ $galeri->alt_text ?: $galeri->title }}"
+                                        class="blade-static-style-1"
+                                    >
+                                </div>
                             </td>
 
                             <td>

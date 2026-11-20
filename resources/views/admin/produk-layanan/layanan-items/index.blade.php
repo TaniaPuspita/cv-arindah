@@ -1,4 +1,7 @@
 @extends('admin.layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/produk-layanan/layanan-items/index.css') }}">
+@endpush
 
 @section('title', 'CMS Kartu Layanan')
 @section('page-title', 'CMS Produk & Layanan')
@@ -108,15 +111,15 @@
             <table class="table pc-table align-middle">
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 90px;">
+                        <th class="text-center blade-static-style-1">
                             Urutan
                         </th>
 
-                        <th class="text-center" style="width: 100px;">
+                        <th class="text-center blade-static-style-2">
                             Ikon
                         </th>
 
-                        <th style="min-width: 220px;">
+                        <th class="blade-static-style-3">
                             Nama Layanan
                         </th>
 
@@ -124,7 +127,7 @@
                             Status
                         </th>
 
-                        <th class="text-center" style="width: 115px;">
+                        <th class="text-center blade-static-style-4">
                             Aksi
                         </th>
                     </tr>

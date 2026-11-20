@@ -374,134 +374,16 @@
 {{-- =========================================================
     STYLE ANIMASI
 ========================================================= --}}
-<style>
-    .arindah-animate {
-        opacity: 0;
-        transform: translateY(22px);
-        transition:
-            opacity 650ms ease,
-            transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
-        will-change: opacity, transform;
-    }
-
-    .arindah-animate.is-visible {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-    .arindah-product-card {
-        transition:
-            opacity 650ms ease,
-            transform 650ms cubic-bezier(0.22, 1, 0.36, 1),
-            box-shadow 250ms ease;
-    }
-
-    .arindah-product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 24px rgba(15, 23, 42, 0.13);
-    }
-
-    .arindah-service-image {
-        transition:
-            opacity 700ms ease,
-            transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
-    }
-
-    .arindah-service-card {
-        transition:
-            box-shadow 250ms ease,
-            transform 250ms ease;
-    }
-
-    .arindah-service-card:hover {
-        box-shadow: 0 8px 22px rgba(15, 23, 42, 0.13);
-        transform: translateY(-2px);
-    }
-
-    .arindah-cta-image {
-        transition:
-            transform 500ms ease,
-            opacity 650ms ease;
-    }
-
-    .arindah-cta-image:hover {
-        transform: scale(1.015);
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        .arindah-animate,
-        .arindah-animate.is-visible,
-        .arindah-product-card,
-        .arindah-service-image,
-        .arindah-service-card,
-        .arindah-cta-image {
-            transition: none !important;
-            transform: none !important;
-            animation: none !important;
-        }
-
-        .arindah-animate {
-            opacity: 1 !important;
-        }
-    }
-</style>
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/public/produk.css') }}">
+@endpush
 
 
 {{-- =========================================================
     JAVASCRIPT ANIMASI SAAT SECTION MASUK KE LAYAR
 ========================================================= --}}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-
-    const animatedItems = document.querySelectorAll(
-        '#produk .arindah-product-card, ' +
-        '#layanan .arindah-service-card, ' +
-        '#layanan .arindah-service-image, ' +
-        '#kontak .arindah-cta-card, ' +
-        '#kontak .arindah-cta-image'
-    );
-
-    // Jeda animasi kartu produk
-    document.querySelectorAll('#produk .arindah-product-card')
-        .forEach((item, index) => {
-            item.style.transitionDelay = `${index * 90}ms`;
-        });
-
-    // Jeda animasi kartu layanan
-    document.querySelectorAll('#layanan .arindah-service-card')
-        .forEach((item, index) => {
-            item.style.transitionDelay = `${index * 100}ms`;
-        });
-
-    // Tampilkan elemen jika IntersectionObserver tidak tersedia
-    if (!('IntersectionObserver' in window)) {
-        animatedItems.forEach(item => {
-            item.classList.add('is-visible');
-        });
-
-        return;
-    }
-
-    const observer = new IntersectionObserver(
-        (entries, currentObserver) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    currentObserver.unobserve(entry.target);
-                }
-            });
-        },
-        {
-            threshold: 0.12,
-            rootMargin: '0px 0px -35px 0px'
-        }
-    );
-
-    animatedItems.forEach(item => {
-        observer.observe(item);
-    });
-
-});
-</script>
+@push('scripts')
+    <script src="{{ asset('js/pages/public/produk.js') }}"></script>
+@endpush
 
 @endsection

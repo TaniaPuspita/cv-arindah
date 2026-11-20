@@ -1,4 +1,7 @@
 @extends('admin.layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/contact-page/edit-section.css') }}">
+@endpush
 
 @section('title', $sectionData['title'] . ' | CV Arindah')
 @section('page-title', $sectionData['title'])
@@ -301,8 +304,8 @@
                                     <img
                                         src="{{ asset('storage/' . $contactPage->{$field}) }}"
                                         alt="{{ $label }}"
-                                        style="max-width: 100%; width: 320px; max-height: 220px; object-fit: cover; border-radius: 10px;"
-                                    >
+
+                                     class="blade-static-style-1">
 
                                 </div>
                             @endif

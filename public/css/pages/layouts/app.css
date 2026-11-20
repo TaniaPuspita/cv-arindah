@@ -1,0 +1,121 @@
+/* layouts - app: aturan tampilan halaman ini. */
+
+html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            overflow-x: clip;
+        }
+
+        img {
+            display: block;
+            max-width: 100%;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        /* NAVBAR DESKTOP */
+        .site-header {
+            position: relative;
+            z-index: 50;
+            width: 100%;
+            background: #ffffff;
+        }
+
+        .nav-link {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            white-space: nowrap;
+            padding: 10px 0;
+            color: #526078;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #0969D8;
+        }
+
+        .nav-link.active::after {
+            position: absolute;
+            right: 0;
+            bottom: 2px;
+            left: 0;
+            height: 3px;
+            border-radius: 9999px;
+            background: #0969D8;
+            content: "";
+        }
+
+        /* NAVBAR MOBILE */
+        .mobile-link {
+            display: block;
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: #526078;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.2s ease, color 0.2s ease;
+        }
+
+        .mobile-link:hover,
+        .mobile-link.active {
+            background: #EAF4FF;
+            color: #0969D8;
+        }
+
+        .mobile-menu-panel {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            z-index: 60;
+            width: min(88vw, 320px);
+            border: 1px solid #E2E8F0;
+            border-radius: 16px;
+            background: #ffffff;
+            padding: 12px;
+            box-shadow: 0 16px 40px rgba(15, 40, 70, 0.14);
+        }
+
+        .mobile-menu-toggle {
+            list-style: none;
+        }
+
+        .mobile-menu-toggle::-webkit-details-marker {
+            display: none;
+        }
+
+        /* RESPONSIVE */
+        section {
+            scroll-margin-top: 16px;
+        }
+
+        a,
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media (max-width: 639px) {
+            section {
+                scroll-margin-top: 8px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }

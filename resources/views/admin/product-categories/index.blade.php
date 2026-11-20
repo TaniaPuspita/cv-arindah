@@ -1,5 +1,8 @@
 
 @extends('admin.layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/product-categories/index.css') }}">
+@endpush
 
 @section('title', 'CMS Produk')
 @section('page-title', 'CMS BERANDA')
@@ -117,12 +120,12 @@
             <table class="table pc-table align-middle">
                 <thead>
                     <tr>
-                        <th class="text-center" style="width: 75px;">Urutan</th>
-                        <th style="width: 105px;">Gambar</th>
-                        <th style="min-width: 175px;">Nama Kategori</th>
+                        <th class="text-center blade-static-style-1">Urutan</th>
+                        <th class="blade-static-style-2">Gambar</th>
+                        <th class="blade-static-style-3">Nama Kategori</th>
                         <th>Deskripsi</th>
                         <th class="text-center">Status</th>
-                        <th class="text-center" style="width: 115px;">Aksi</th>
+                        <th class="text-center blade-static-style-4">Aksi</th>
                     </tr>
                 </thead>
 

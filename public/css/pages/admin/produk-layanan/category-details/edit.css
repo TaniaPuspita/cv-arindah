@@ -1,0 +1,307 @@
+/* admin - produk-layanan - category-details - edit: aturan tampilan halaman ini. */
+
+.category-detail-page {
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+    }
+
+    .category-info-card,
+    .detail-section-card {
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .current-image {
+        margin: 12px 0 16px;
+        padding: 14px;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
+        background: #f9fafb;
+    }
+
+    .current-image p {
+        margin: 0 0 10px;
+    }
+
+    .current-image img {
+        display: block;
+        width: 100%;
+        max-width: 420px;
+        max-height: 280px;
+        object-fit: contain;
+        object-position: left center;
+        border-radius: 8px;
+        background: #fff;
+    }
+
+    .current-image .field-hint {
+        display: block;
+        margin-top: 10px;
+        overflow-wrap: anywhere;
+    }
+
+    .image-load-error {
+        display: none;
+        margin-top: 10px !important;
+        color: #b42318;
+    }
+
+    .detail-tab-panel[hidden] {
+        display: none !important;
+    }
+
+    /* TAB KONTEN */
+    .detail-content-tabs {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    .detail-content-tab {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 0;
+        min-height: 46px;
+        padding: 10px 14px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #fff;
+        color: #475569;
+        font: inherit;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background .2s, color .2s, border-color .2s;
+    }
+
+    .detail-content-tab:hover {
+        border-color: #93c5fd;
+        color: #0969d8;
+    }
+
+    .detail-content-tab.active {
+        border-color: #0969d8;
+        background: #eff6ff;
+        color: #0969d8;
+    }
+
+    .detail-content-tab i {
+        flex-shrink: 0;
+    }
+
+    .detail-section-card {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .detail-subheading {
+        margin: 24px 0 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .detail-subheading h4 {
+        margin: 0;
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .detail-form-actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 24px;
+    }
+
+    .field-error {
+        display: block;
+        margin-top: 6px;
+        color: #b42318;
+        overflow-wrap: anywhere;
+    }
+
+    .field-hint {
+        display: block;
+        margin-top: 6px;
+        color: #64748b;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    /* PEMILIH IKON */
+    .icon-picker {
+        margin-top: 10px;
+    }
+
+    .icon-picker-label {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .icon-picker-options {
+        display: grid;
+        grid-template-columns: repeat(6, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .icon-option {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        min-width: 0;
+        min-height: 72px;
+        padding: 8px 4px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #fff;
+        color: #475569;
+        font-size: 11px;
+        text-align: center;
+        overflow-wrap: anywhere;
+        cursor: pointer;
+        transition: .2s ease;
+    }
+
+    .icon-option i {
+        font-size: 20px;
+    }
+
+    .icon-option:hover {
+        border-color: #93c5fd;
+        background: #f8fbff;
+        color: #0969d8;
+    }
+
+    .icon-option.selected {
+        border-color: #0969d8;
+        background: #eff6ff;
+        color: #0969d8;
+        box-shadow: 0 0 0 1px #0969d8;
+    }
+
+    .selected-icon-preview {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 10px;
+        padding: 10px 12px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        background: #f8fafc;
+        overflow-wrap: anywhere;
+    }
+
+    .selected-icon-preview i {
+        font-size: 23px;
+        color: #0969d8;
+    }
+
+    .selected-icon-preview span {
+        min-width: 0;
+        font-size: 12px;
+        overflow-wrap: anywhere;
+    }
+
+    /* RESPONSIVE TABLET */
+    @media (max-width: 768px) {
+        .detail-content-tabs {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .detail-content-tab {
+            justify-content: flex-start;
+            padding: 10px;
+            font-size: 13px;
+        }
+
+        .icon-picker-options {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .current-image img {
+            max-width: 100%;
+        }
+    }
+
+    /* RESPONSIVE HP */
+    @media (max-width: 480px) {
+        .category-detail-page .page-title {
+            font-size: 23px;
+            line-height: 1.35;
+            overflow-wrap: anywhere;
+        }
+
+        .category-detail-page .page-description {
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .detail-content-tabs {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 7px;
+            margin: 16px 0;
+        }
+
+        .detail-content-tab {
+            min-height: 44px;
+            padding: 9px;
+            gap: 6px;
+            font-size: 12px;
+        }
+
+        .detail-section-card {
+            padding: 16px;
+        }
+
+        .detail-section-card .cms-card-heading {
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .detail-section-card .cms-card-heading h3 {
+            font-size: 17px;
+            line-height: 1.4;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-section-card .cms-card-heading p {
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .detail-form-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+        .detail-form-actions .primary-button,
+        .detail-form-actions .secondary-button {
+            width: 100%;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .icon-picker-options {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .current-image {
+            padding: 10px;
+        }
+
+        .cms-form-group input,
+        .cms-form-group textarea {
+            max-width: 100%;
+        }
+    }

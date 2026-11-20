@@ -1,0 +1,46 @@
+/* admin - produk-layanan - layanan-items - edit: aturan tampilan halaman ini. */
+
+.service-icon-label {
+            display: block;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .service-icon-radio {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .service-icon-option {
+            display: flex;
+            min-height: 120px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 12px;
+            border: 1px solid #DEE2E6;
+            border-radius: 12px;
+            background: #FFFFFF;
+            transition: .2s ease;
+        }
+
+        .service-icon-option > i {
+            margin-bottom: 10px;
+            color: #0969D8;
+            font-size: 1.8rem;
+        }
+
+        .service-icon-radio:checked + .service-icon-option {
+            border: 2px solid #0969D8;
+            background: #F0F7FF;
+        }
+
+        .service-icon-radio:focus-visible + .service-icon-option {
+            outline: 2px solid rgba(9, 105, 216, .3);
+            outline-offset: 3px;
+        }
+
+        .service-icon-option:hover {
+            border-color: #0969D8;
+        }

@@ -1,0 +1,74 @@
+/* admin - public-galeri-heroes - edit: aturan tampilan halaman ini. */
+
+/* Preview gambar Hero */
+        .hero-image-preview {
+            width: 100%;
+            max-width: 480px;
+            margin-top: 10px;
+            overflow: hidden;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            background: #f8fafc;
+        }
+
+        .hero-image-preview img {
+            display: block;
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Tombol Batal warna bata */
+        .cancel-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 11px 18px;
+            border: 1px solid #a84332;
+            border-radius: 8px;
+            background-color: #a84332;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition:
+                background-color 0.2s ease,
+                border-color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .cancel-button:hover {
+            background-color: #893628;
+            border-color: #893628;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+        .cancel-button:focus-visible {
+            outline: 3px solid rgba(168, 67, 50, 0.25);
+            outline-offset: 3px;
+        }
+
+        /* Tampilan responsif pada HP */
+        @media (max-width: 576px) {
+            .cms-form-actions {
+                flex-wrap: wrap;
+                gap: 10px;
+            }
+
+            .cms-form-actions .primary-button,
+            .cms-form-actions .cancel-button {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .hero-image-preview {
+                max-width: 100%;
+            }
+
+            .hero-image-preview img {
+                height: 190px;
+            }
+        }

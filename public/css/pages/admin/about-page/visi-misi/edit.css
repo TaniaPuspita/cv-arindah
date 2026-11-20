@@ -1,0 +1,89 @@
+/* admin - about-page - visi-misi - edit: aturan tampilan halaman ini. */
+
+.cms-form-divider {
+        height: 1px;
+        background: #e8eef5;
+        margin: 28px 0;
+    }
+
+    .cms-section-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 20px;
+    }
+
+    .cms-section-heading h3 {
+        margin: 0;
+        color: #193f6b;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .cms-section-heading > i {
+        color: #0969d8;
+        font-size: 20px;
+    }
+
+    .cms-number {
+        display: inline-flex;
+        width: 34px;
+        height: 34px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        border: 1px solid #cfe2f7;
+        background: #f3f8fe;
+        color: #0969d8;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .cms-form-group label {
+        display: block;
+        margin-bottom: 8px;
+        color: #334b68;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .cms-form-group {
+        margin-bottom: 22px;
+    }
+
+    .cms-form-group .text-danger {
+        display: block;
+        margin-top: 6px;
+        font-size: 12px;
+    }
+
+    .cms-input,
+    .cms-textarea {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .cms-textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    
+    .cms-form-actions {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 22px;
+        border-top: 1px solid #e8eef5;
+    }
+
+    @media (max-width: 576px) {
+        .cms-form-actions {
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+    }

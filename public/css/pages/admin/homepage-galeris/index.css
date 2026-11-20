@@ -1,0 +1,35 @@
+
+
+/* admin/homepage-galeris/index: aturan tampilan statis yang dipindahkan dari atribut Blade. */
+.blade-static-style-1 { width:100px;height:65px;object-fit:cover }
+.pc-page img.blade-static-style-1 { height:65px; }
+.gallery-thumbnail-preview {
+    position: relative;
+    display: grid;
+    width: 100px;
+    height: 65px;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid #dbe4f0;
+    border-radius: 0.5rem;
+    background: #f8fafc;
+    isolation: isolate;
+}
+
+.gallery-thumbnail-preview::before {
+    position: absolute;
+    z-index: -1;
+    inset: -5px;
+    background-image: var(--gallery-thumbnail-image);
+    background-position: center;
+    background-size: cover;
+    content: "";
+    filter: blur(6px);
+    opacity: 0.45;
+}
+
+.pc-page img.blade-static-style-1 {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}

@@ -280,78 +280,13 @@
     </section>
 
     {{-- CSS TAMBAHAN KHUSUS PRATINJAU FOTO --}}
-    <style>
-        .galeri-preview-container {
-            margin-top: 16px;
-        }
-
-        .galeri-preview-container p {
-            margin-bottom: 10px;
-            color: #788395;
-            font-size: 13px;
-        }
-
-        .galeri-preview-image {
-            display: block;
-            width: 320px;
-            max-width: 100%;
-            height: 220px;
-            object-fit: cover;
-            object-position: center;
-            border: 1px solid #e8ebf0;
-            border-radius: 10px;
-            background: #f1f3f6;
-        }
-
-        .galeri-preview-container .field-hint {
-            display: block;
-            margin-top: 8px;
-            overflow-wrap: anywhere;
-        }
-
-        @media (max-width: 575.98px) {
-            .galeri-preview-image {
-                width: 100%;
-                height: 200px;
-            }
-        }
-    </style>
+    @push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/public-galeri-items/create.css') }}">
+@endpush
 
     {{-- JAVASCRIPT PRATINJAU FOTO --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const input = document.getElementById('image');
-            const container = document.getElementById('galeri-preview-container');
-            const preview = document.getElementById('galeri-preview-image');
-            const fileName = document.getElementById('galeri-preview-name');
-
-            if (!input || !container || !preview || !fileName) {
-                return;
-            }
-
-            let objectUrl = null;
-
-            input.addEventListener('change', function () {
-                if (objectUrl) {
-                    URL.revokeObjectURL(objectUrl);
-                    objectUrl = null;
-                }
-
-                const file = this.files && this.files[0];
-
-                if (!file) {
-                    container.hidden = true;
-                    preview.removeAttribute('src');
-                    fileName.textContent = '';
-                    return;
-                }
-
-                objectUrl = URL.createObjectURL(file);
-                preview.src = objectUrl;
-                fileName.textContent = file.name;
-                container.hidden = false;
-            });
-        });
-    </script>
+    @push('scripts')
+    <script src="{{ asset('js/pages/admin/public-galeri-items/create.js') }}"></script>
+@endpush
 
 @endsection

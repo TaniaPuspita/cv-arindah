@@ -1,5 +1,8 @@
 
 @extends('admin.layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/homepage-galeris/edit.css') }}">
+@endpush
 
 @section('title', 'Edit Foto Galeri')
 @section('page-title', 'Edit Foto Galeri')
@@ -59,8 +62,8 @@
                 <div>
                     <img src="{{ asset('storage/' . $homepageGaleri->image) }}"
                          alt="{{ $homepageGaleri->alt_text ?: $homepageGaleri->title }}"
-                         class="img-fluid rounded-3 border"
-                         style="max-width:320px;max-height:220px;object-fit:cover">
+                         class="img-fluid rounded-3 border blade-static-style-1"
+                        >
                 </div>
             </div>
 

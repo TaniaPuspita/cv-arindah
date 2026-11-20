@@ -580,17 +580,7 @@
     @stack('scripts')
 
     {{-- NOTIFIKASI --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            document.querySelectorAll('.alert-success').forEach(function (alert) {
-                setTimeout(function () {
-                    if (typeof bootstrap !== 'undefined' && bootstrap.Alert) {
-                        bootstrap.Alert.getOrCreateInstance(alert).close();
-                    }
-                }, 5000);
-            });
-        });
-    </script>
+    <script src="{{ asset('js/pages/admin/layouts/app.js') }}"></script>
 
 </body>
 </html>

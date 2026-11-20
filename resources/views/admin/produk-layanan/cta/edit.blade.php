@@ -283,76 +283,13 @@
     </section>
 
     {{-- CSS KHUSUS PREVIEW GAMBAR CTA --}}
-    <style>
-        .current-image .cta-image-thumbnail,
-        .current-image #image-preview {
-            display: block;
-            width: 320px;
-            max-width: 100%;
-            height: 220px;
-            max-height: 220px;
-            margin: 0;
-            object-fit: cover;
-            object-position: center;
-            border: 1px solid #e2eaf3;
-            border-radius: 10px;
-            background: #f8fafc;
-            box-sizing: border-box;
-        }
-
-        #image-preview-wrapper[hidden] {
-            display: none !important;
-        }
-
-        @media (max-width: 576px) {
-            .current-image .cta-image-thumbnail,
-            .current-image #image-preview {
-                width: 100%;
-                height: 200px;
-                max-height: 200px;
-            }
-        }
-    </style>
+    @push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/produk-layanan/cta/edit.css') }}">
+@endpush
 
     {{-- PREVIEW GAMBAR SEBELUM DIUNGGAH --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const input = document.getElementById('image');
-            const wrapper = document.getElementById('image-preview-wrapper');
-            const preview = document.getElementById('image-preview');
-
-            if (!input || !wrapper || !preview) {
-                return;
-            }
-
-            let previousObjectUrl = null;
-
-            input.addEventListener('change', function () {
-                const file = this.files && this.files[0];
-
-                if (previousObjectUrl) {
-                    URL.revokeObjectURL(previousObjectUrl);
-                    previousObjectUrl = null;
-                }
-
-                if (!file) {
-                    preview.removeAttribute('src');
-                    wrapper.hidden = true;
-                    return;
-                }
-
-                if (!file.type.startsWith('image/')) {
-                    this.value = '';
-                    preview.removeAttribute('src');
-                    wrapper.hidden = true;
-                    return;
-                }
-
-                previousObjectUrl = URL.createObjectURL(file);
-                preview.src = previousObjectUrl;
-                wrapper.hidden = false;
-            });
-        });
-    </script>
+    @push('scripts')
+    <script src="{{ asset('js/pages/admin/produk-layanan/cta/edit.js') }}"></script>
+@endpush
 
 @endsection

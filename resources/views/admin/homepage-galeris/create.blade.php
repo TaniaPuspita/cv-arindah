@@ -114,14 +114,14 @@
                 </select>
             </div>
 
-            <div class="d-flex justify-content-end gap-2 pt-3 border-top">
+            <div class="cms-form-actions">
+                <button type="submit" class="primary-button">
+                    <i class="bi bi-floppy"></i> Simpan Foto
+                </button>
                 <a href="{{ route('admin.homepage-galeris.index') }}"
-                   class="btn btn-outline-secondary rounded-3 px-4">
+                   class="secondary-button">
                     Batal
                 </a>
-                <button type="submit" class="pc-primary-btn">
-                    <i class="bi bi-check-circle me-1"></i> Simpan Foto
-                </button>
             </div>
         </form>
     </div>

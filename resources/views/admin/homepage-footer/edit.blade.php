@@ -5,6 +5,9 @@
 ========================================================= --}}
 
 @extends('admin.layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/homepage-footer/edit.css') }}">
+@endpush
 
 @section('title', 'CMS Footer | CV Arindah')
 @section('page-title', 'CMS Footer')
@@ -137,8 +140,8 @@
                         <img
                             src="{{ asset('storage/' . $footer->logo) }}"
                             alt="Logo {{ $footer->company_name }}"
-                            style="max-width: 180px; max-height: 120px; object-fit: contain;"
-                        >
+
+                         class="blade-static-style-1">
                     </div>
                 @else
                     <div class="current-image">
@@ -330,7 +333,7 @@
                         <small class="field-error">{{ $message }}</small>
                     @enderror
 
-                    <label for="navigation_route_{{ $i }}" style="margin-top: 12px;">
+                    <label for="navigation_route_{{ $i }}" class="blade-static-style-1">
                         Tujuan Menu {{ $i + 1 }}
                     </label>
 

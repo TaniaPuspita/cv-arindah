@@ -440,166 +440,9 @@
 {{-- =========================================================
     5. GALERI
 ========================================================= --}}
-<style>
-    html {
-        scroll-behavior: smooth;
-        scroll-padding-top: 90px;
-    }
-
-    #galeri-track {
-        transition: transform 900ms cubic-bezier(.22,.8,.24,1);
-        will-change: transform;
-    }
-
-    #galeri .galeri-slide {
-        transition:
-            transform 800ms cubic-bezier(.22,.8,.24,1),
-            opacity 800ms ease,
-            filter 800ms ease,
-            box-shadow 400ms ease;
-        transform: scale(.93);
-        opacity: .72;
-        filter: saturate(.85);
-    }
-
-    #galeri .galeri-slide.is-active {
-        transform: scale(1);
-        opacity: 1;
-        filter: saturate(1.05);
-    }
-
-    #galeri .galeri-slide:hover {
-        transform: translateY(-6px) scale(1);
-    }
-
-    #galeri .galeri-slide img {
-        transform: scale(1.12);
-        transition: transform 1600ms cubic-bezier(.22,.8,.24,1);
-    }
-
-    #galeri .galeri-slide.is-active img {
-        transform: scale(1);
-    }
-
-    #galeri .galeri-nav {
-        transition:
-            transform 250ms ease,
-            background-color 250ms ease,
-            color 250ms ease;
-    }
-
-    #galeri .galeri-nav:active {
-        transform: translateY(-50%) scale(.9);
-    }
-
-    #galeri-viewport {
-        cursor: grab;
-        touch-action: pan-y;
-    }
-
-    #galeri-viewport.is-dragging {
-        cursor: grabbing;
-    }
-
-    #galeri-viewport.is-dragging #galeri-track {
-        transition: none;
-    }
-
-    /* Animasi UX untuk bagian halaman */
-    @media (prefers-reduced-motion: no-preference) {
-        .ux-reveal {
-            opacity: 0;
-            transform: translateY(22px);
-            transition:
-                opacity 700ms cubic-bezier(.22,.8,.24,1),
-                transform 700ms cubic-bezier(.22,.8,.24,1);
-            transition-delay: var(--ux-delay, 0ms);
-        }
-
-        .ux-reveal.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        #beranda h1,
-        #beranda p,
-        #beranda a,
-        #beranda img {
-            animation: ux-hero-enter 850ms cubic-bezier(.22,.8,.24,1) both;
-        }
-
-        #beranda p { animation-delay: 80ms; }
-        #beranda h1 { animation-delay: 160ms; }
-        #beranda a { animation-delay: 260ms; }
-        #beranda img { animation-delay: 180ms; }
-
-        #beranda img {
-            transform-origin: center;
-            transition: transform 700ms cubic-bezier(.22,.8,.24,1);
-        }
-
-        #beranda img:hover {
-            transform: scale(1.025);
-        }
-
-        #produk img {
-            transition: transform 650ms cubic-bezier(.22,.8,.24,1);
-        }
-
-        #produk .group:hover img {
-            transform: scale(1.04);
-        }
-
-        #tentang img,
-        #layanan img {
-            transition: transform 700ms cubic-bezier(.22,.8,.24,1);
-        }
-
-        #tentang img:hover,
-        #layanan img:hover {
-            transform: scale(1.025);
-        }
-
-        #kontak a {
-            transition:
-                transform 300ms ease,
-                box-shadow 300ms ease,
-                background-color 300ms ease;
-        }
-
-        #kontak a:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 24px rgba(9,105,216,.2);
-        }
-    }
-
-    @keyframes ux-hero-enter {
-        from {
-            opacity: 0;
-            transform: translateY(16px);
-        }
-
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-        html {
-            scroll-behavior: auto;
-        }
-
-        *,
-        *::before,
-        *::after {
-            animation-duration: .01ms !important;
-            animation-iteration-count: 1 !important;
-            scroll-behavior: auto !important;
-            transition-duration: .01ms !important;
-        }
-    }
-</style>
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/public/home.css') }}">
+@endpush
 
 <section id="galeri" class="overflow-hidden bg-[#F3F8FE] py-14 lg:py-16">
     <div class="mx-auto max-w-[1296px] px-6 lg:px-8">
@@ -638,13 +481,6 @@
 
                     @forelse ($galeris as $galeri)
                         @php
-                            $ukuranKartu = match ($loop->index % 5) {
-                                0 => 'h-[210px] w-[75%] sm:h-[260px] sm:w-[38%] lg:h-[265px] lg:w-[25%]',
-                                1 => 'h-[250px] w-[78%] sm:h-[300px] sm:w-[42%] lg:h-[310px] lg:w-[28%]',
-                                2 => 'h-[290px] w-[85%] sm:h-[340px] sm:w-[48%] lg:h-[360px] lg:w-[34%]',
-                                3 => 'h-[250px] w-[78%] sm:h-[300px] sm:w-[42%] lg:h-[310px] lg:w-[28%]',
-                                default => 'h-[210px] w-[75%] sm:h-[260px] sm:w-[38%] lg:h-[265px] lg:w-[25%]',
-                            };
 
                             $urlFoto = str_starts_with($galeri->image, 'images/')
                                 ? asset($galeri->image)
@@ -652,7 +488,7 @@
                         @endphp
 
                         <div
-                            class="galeri-slide relative {{ $ukuranKartu }} shrink-0 overflow-hidden rounded-2xl border-4 border-white bg-white shadow-xl"
+                            class="galeri-slide relative shrink-0 overflow-hidden rounded-2xl border-4 border-white bg-white shadow-xl"
                             data-galeri-slide
                         >
                             <img
@@ -689,14 +525,14 @@
                 id="galeri-counter"
                 class="text-xs font-medium text-slate-500"
             >
-                {{ $galeris->isNotEmpty() ? '1 / ' . $galeris->count() : '0 / 0' }}
+                {{ $galeris->isNotEmpty() ? ($galeris->count() > 1 ? '2' : '1') . ' / ' . $galeris->count() : '0 / 0' }}
             </span>
 
             <div class="h-1.5 w-24 overflow-hidden rounded-full bg-[#DCE8F7]">
                 <div
                     id="galeri-progress"
                     class="h-full rounded-full bg-[#0969D8]"
-                    style="width: {{ $galeris->isNotEmpty() ? 100 / $galeris->count() : 0 }}%; transition: width 700ms cubic-bezier(.22,.8,.24,1);"
+                    style="width: {{ $galeris->isNotEmpty() ? min(2, $galeris->count()) * 100 / $galeris->count() : 0 }}%; transition: width 700ms cubic-bezier(.22,.8,.24,1);"
                 ></div>
             </div>
         </div>
@@ -772,204 +608,8 @@
 {{-- =========================================================
     7. SCRIPT NAVIGASI GALERI
 ========================================================= --}}
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const viewport = document.getElementById('galeri-viewport');
-    const track = document.getElementById('galeri-track');
-    const prevBtn = document.getElementById('galeri-prev');
-    const nextBtn = document.getElementById('galeri-next');
-    const counter = document.getElementById('galeri-counter');
-    const progress = document.getElementById('galeri-progress');
-
-    if (!viewport || !track || !prevBtn || !nextBtn) return;
-
-    const slides = Array.from(track.querySelectorAll('.galeri-slide'));
-    if (!slides.length) return;
-
-    let current = 0;
-    let startX = 0;
-    let dragging = false;
-    let moved = 0;
-    let baseX = 0;
-    let resizeTimer;
-
-    function maxScroll() {
-        return Math.max(0, track.scrollWidth - viewport.clientWidth);
-    }
-
-    function getMaxIndex() {
-        const max = maxScroll();
-        const index = slides.findIndex(slide => slide.offsetLeft >= max - 1);
-
-        return index === -1 ? slides.length - 1 : index;
-    }
-
-    function update() {
-        const maxIndex = getMaxIndex();
-        current = Math.max(0, Math.min(current, maxIndex));
-
-        const x = Math.min(slides[current].offsetLeft, maxScroll());
-        track.style.transform = `translate3d(${-x}px, 0, 0)`;
-
-        // Tentukan foto yang paling dekat dengan bagian tengah viewport.
-        const center = x + viewport.clientWidth / 2;
-        let active = 0;
-        let best = Infinity;
-
-        slides.forEach((slide, index) => {
-            const distance = Math.abs(
-                slide.offsetLeft + slide.offsetWidth / 2 - center
-            );
-
-            if (distance < best) {
-                best = distance;
-                active = index;
-            }
-        });
-
-        slides.forEach((slide, index) => {
-            slide.classList.toggle('is-active', index === active);
-        });
-
-        if (counter) {
-            counter.textContent = `${active + 1} / ${slides.length}`;
-        }
-
-        if (progress) {
-            progress.style.width = `${((active + 1) / slides.length) * 100}%`;
-        }
-
-        prevBtn.disabled = current === 0;
-        nextBtn.disabled = current >= maxIndex;
-
-        prevBtn.classList.toggle('opacity-40', prevBtn.disabled);
-        nextBtn.classList.toggle('opacity-40', nextBtn.disabled);
-        prevBtn.classList.toggle('cursor-not-allowed', prevBtn.disabled);
-        nextBtn.classList.toggle('cursor-not-allowed', nextBtn.disabled);
-    }
-
-    function go(direction) {
-        current += direction;
-        update();
-    }
-
-    prevBtn.addEventListener('click', () => go(-1));
-    nextBtn.addEventListener('click', () => go(1));
-
-    // Geser foto dengan mouse atau sentuhan.
-    viewport.addEventListener('pointerdown', function (event) {
-        if (event.pointerType === 'mouse' && event.button !== 0) return;
-
-        dragging = true;
-        startX = event.clientX;
-        moved = 0;
-        baseX = Math.min(slides[current].offsetLeft, maxScroll());
-
-        viewport.classList.add('is-dragging');
-
-        if (viewport.setPointerCapture) {
-            viewport.setPointerCapture(event.pointerId);
-        }
-    });
-
-    viewport.addEventListener('pointermove', function (event) {
-        if (!dragging) return;
-
-        moved = event.clientX - startX;
-
-        const nextPosition = Math.max(
-            0,
-            Math.min(baseX - moved, maxScroll())
-        );
-
-        track.style.transform = `translate3d(${-nextPosition}px, 0, 0)`;
-    });
-
-    function endDrag() {
-        if (!dragging) return;
-
-        dragging = false;
-        viewport.classList.remove('is-dragging');
-
-        if (moved < -50) {
-            current += 1;
-        } else if (moved > 50) {
-            current -= 1;
-        }
-
-        update();
-    }
-
-    viewport.addEventListener('pointerup', endDrag);
-    viewport.addEventListener('pointercancel', endDrag);
-
-    // Navigasi keyboard.
-    document.addEventListener('keydown', function (event) {
-        const target = event.target;
-
-        if (
-            target &&
-            ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)
-        ) {
-            return;
-        }
-
-        if (event.key === 'ArrowLeft') go(-1);
-        if (event.key === 'ArrowRight') go(1);
-    });
-
-    // Hitung ulang posisi slider saat ukuran layar berubah.
-    window.addEventListener('resize', function () {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(update, 120);
-    });
-
-    window.addEventListener('load', update);
-
-    // Perbarui posisi setelah gambar selesai dimuat.
-    slides.forEach(slide => {
-        const img = slide.querySelector('img');
-
-        if (img && !img.complete) {
-            img.addEventListener('load', update, { once: true });
-            img.addEventListener('error', update, { once: true });
-        }
-    });
-
-    update();
-});
-
-// Animasi UX saat konten mulai terlihat di layar.
-document.addEventListener('DOMContentLoaded', function () {
-    const revealTargets = document.querySelectorAll(
-        '#tentang > div, #produk > div > div, #produk .grid > div, ' +
-        '#layanan > div > div, #kontak > div > div'
-    );
-
-    revealTargets.forEach(function (element, index) {
-        element.classList.add('ux-reveal');
-        element.style.setProperty('--ux-delay', `${(index % 4) * 80}ms`);
-    });
-
-    if (!('IntersectionObserver' in window)) {
-        revealTargets.forEach(element => element.classList.add('is-visible'));
-        return;
-    }
-
-    const observer = new IntersectionObserver(function (entries, currentObserver) {
-        entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                currentObserver.unobserve(entry.target);
-            }
-        });
-    }, {
-        threshold: 0.12,
-        rootMargin: '0px 0px -35px 0px'
-    });
-
-    revealTargets.forEach(element => observer.observe(element));
-});
-</script>
+@push('scripts')
+    <script src="{{ asset('js/pages/public/home.js') }}"></script>
+@endpush
 
 @endsection

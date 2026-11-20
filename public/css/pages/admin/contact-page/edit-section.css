@@ -1,0 +1,4 @@
+
+
+/* admin/contact-page/edit-section: aturan tampilan statis yang dipindahkan dari atribut Blade. */
+.blade-static-style-1 { max-width: 100%; width: 320px; max-height: 220px; object-fit: cover; border-radius: 10px; }

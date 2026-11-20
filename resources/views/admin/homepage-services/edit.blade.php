@@ -6,58 +6,9 @@
 @push('styles')
     <link rel="stylesheet" href="{{ asset('css/admin.css') }}">
 
-    <style>
-        .service-icon-label {
-            display: block;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
 
-        .service-icon-radio {
-            position: absolute;
-            opacity: 0;
-            width: 1px;
-            height: 1px;
-            pointer-events: none;
-        }
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/homepage-services/edit.css') }}">
 
-        .service-icon-option {
-            display: flex;
-            min-height: 132px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #DEE2E6 !important;
-            border-radius: 10px;
-            padding: 16px 12px;
-            background: #FFFFFF;
-            transition:
-                border-color .2s ease,
-                background-color .2s ease,
-                box-shadow .2s ease;
-        }
-
-        .service-icon-option > i {
-            font-size: 1.8rem;
-            color: #0969D8;
-        }
-
-        /* Hanya ikon yang dipilih yang memiliki latar biru */
-        .service-icon-radio:checked + .service-icon-option {
-            border: 2px solid #0969D8 !important;
-            background: #F0F7FF;
-        }
-
-        .service-icon-radio:focus-visible + .service-icon-option {
-            outline: 2px solid rgba(9, 105, 216, .25);
-            outline-offset: 3px;
-        }
-
-        .service-icon-option:hover {
-            border-color: #0969D8 !important;
-        }
-    </style>
 @endpush
 
 @section('content')
@@ -323,8 +274,8 @@
                         <img
                             src="{{ asset('storage/' . $homepageService->image) }}"
                             alt="{{ $homepageService->name }}"
-                            class="img-fluid rounded-3 border"
-                            style="max-width: 260px; max-height: 180px; object-fit: cover;"
+                            class="img-fluid rounded-3 border blade-static-style-1"
+
                         >
                     </div>
                 @else

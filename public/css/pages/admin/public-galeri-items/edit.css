@@ -1,0 +1,52 @@
+/* admin - public-galeri-items - edit: aturan tampilan halaman ini. */
+
+.galeri-current-image {
+            display: block;
+            width: 320px;
+            max-width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border: 1px solid #e8ebf0;
+            border-radius: 10px;
+            background: #f1f3f6;
+        }
+
+        .current-image p,
+        .galeri-new-preview p {
+            margin-bottom: 10px;
+            color: #788395;
+            font-size: 13px;
+        }
+
+        .galeri-image-fallback {
+            width: 320px;
+            max-width: 100%;
+            min-height: 140px;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 20px;
+            color: #8791a0;
+            background: #f7f9fc;
+            border: 1px solid #e8ebf0;
+            border-radius: 10px;
+        }
+
+        .galeri-image-fallback i {
+            font-size: 28px;
+        }
+
+        .galeri-new-preview {
+            margin-top: 14px;
+        }
+
+        @media (max-width: 575.98px) {
+            .galeri-current-image {
+                width: 100%;
+                height: 200px;
+            }
+        }
+
+/* admin/public-galeri-items/edit: aturan tampilan statis yang dipindahkan dari atribut Blade. */
+.blade-static-style-2 { display: none; }

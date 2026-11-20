@@ -146,7 +146,7 @@
                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
                         >
 
-                        <div class="galeri-image-fallback" style="display: none;">
+                        <div class="galeri-image-fallback blade-static-style-1">
                             <i class="bi bi-image"></i>
                             <span>Foto tidak dapat dimuat.</span>
                         </div>
@@ -316,86 +316,13 @@
     </section>
 
     {{-- CSS TAMBAHAN KHUSUS FOTO GALERI --}}
-    <style>
-        .galeri-current-image {
-            display: block;
-            width: 320px;
-            max-width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border: 1px solid #e8ebf0;
-            border-radius: 10px;
-            background: #f1f3f6;
-        }
-
-        .current-image p,
-        .galeri-new-preview p {
-            margin-bottom: 10px;
-            color: #788395;
-            font-size: 13px;
-        }
-
-        .galeri-image-fallback {
-            width: 320px;
-            max-width: 100%;
-            min-height: 140px;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 20px;
-            color: #8791a0;
-            background: #f7f9fc;
-            border: 1px solid #e8ebf0;
-            border-radius: 10px;
-        }
-
-        .galeri-image-fallback i {
-            font-size: 28px;
-        }
-
-        .galeri-new-preview {
-            margin-top: 14px;
-        }
-
-        @media (max-width: 575.98px) {
-            .galeri-current-image {
-                width: 100%;
-                height: 200px;
-            }
-        }
-    </style>
+    @push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/public-galeri-items/edit.css') }}">
+@endpush
 
     {{-- PRATINJAU FOTO SEBELUM DISIMPAN --}}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const input = document.getElementById('image');
-            const container = document.getElementById('galeri-new-preview');
-            const preview = document.getElementById('galeri-new-image');
-
-            if (!input || !container || !preview) return;
-
-            let objectUrl = null;
-
-            input.addEventListener('change', function () {
-                if (objectUrl) {
-                    URL.revokeObjectURL(objectUrl);
-                    objectUrl = null;
-                }
-
-                const file = this.files && this.files[0];
-
-                if (!file) {
-                    container.hidden = true;
-                    preview.removeAttribute('src');
-                    return;
-                }
-
-                objectUrl = URL.createObjectURL(file);
-                preview.src = objectUrl;
-                container.hidden = false;
-            });
-        });
-    </script>
+    @push('scripts')
+    <script src="{{ asset('js/pages/admin/public-galeri-items/edit.js') }}"></script>
+@endpush
 
 @endsection

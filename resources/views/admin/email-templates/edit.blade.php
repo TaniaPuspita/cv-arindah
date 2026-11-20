@@ -1,4 +1,7 @@
 @extends('admin.layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/admin/email-templates/edit.css') }}">
+@endpush
 
 @section('title', 'Edit Template Email | CV Arindah')
 @section('page-title', 'Edit Template Email')
@@ -19,7 +22,7 @@
         <div class="alert alert-danger"><strong>Template belum dapat disimpan.</strong><ul class="mb-0 mt-2">@foreach ($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul></div>
     @endif
 
-    <form id="email-template-form" method="POST" action="{{ route('admin.email-templates.update', $emailTemplate) }}">
+    <form id="email-template-form" data-initial-body="{{ $editorBody }}" data-preview-url="{{ route('admin.email-templates.preview') }}" method="POST" action="{{ route('admin.email-templates.update', $emailTemplate) }}">
         @csrf
         @method('PUT')
         <div class="card border-0 shadow-sm"><div class="card-body p-4">
@@ -46,7 +49,7 @@
                         <button class="ql-link" type="button" aria-label="Tautan"></button>
                         <button class="ql-clean" type="button" aria-label="Hapus format"></button>
                     </div>
-                    <div id="email-editor" class="bg-white border border-top-0" style="min-height: 340px;"></div>
+                    <div id="email-editor" class="bg-white border border-top-0 blade-static-style-1"></div>
                     @error('body')<div class="text-danger small mt-1">{{ $message }}</div>@enderror
                 </div>
                 <aside class="col-12 col-xl-3">
@@ -76,7 +79,7 @@
             <div id="preview-panel" class="border rounded-3 p-3 mt-4 d-none">
                 <h2 class="h6 fw-bold">Pratinjau (data contoh)</h2>
                 <div class="small text-muted mb-2" id="preview-subject"></div>
-                <iframe id="preview-body" title="Pratinjau isi email" sandbox="" class="w-100 border rounded-2" style="min-height: 260px;"></iframe>
+                <iframe id="preview-body" title="Pratinjau isi email" sandbox="" class="w-100 border rounded-2 blade-static-style-2"></iframe>
                 <div id="preview-error" class="text-danger small mt-2"></div>
             </div>
         </div></div>
@@ -85,50 +88,7 @@
 
 <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-<script>
-    const emailEditor = new Quill('#email-editor', {
-        theme: 'snow',
-        modules: {toolbar: '#editor-toolbar'},
-        formats: ['bold', 'italic', 'underline', 'list', 'link']
-    });
-    const emailBodyField = document.getElementById('body');
-    const initialBody = @json($editorBody);
-    emailEditor.clipboard.dangerouslyPasteHTML(initialBody, 'silent');
-    const syncEmailBody = () => { emailBodyField.value = emailEditor.root.innerHTML; };
-    emailEditor.on('text-change', syncEmailBody);
-    syncEmailBody();
-
-    document.querySelectorAll('.insert-variable').forEach((button) => {
-        button.addEventListener('click', () => {
-            const selection = emailEditor.getSelection(true);
-            emailEditor.insertText(selection.index, '{' + '{' + button.dataset.variable + '}' + '}');
-            emailEditor.setSelection(selection.index + button.dataset.variable.length + 4);
-            syncEmailBody();
-        });
-    });
-
-    document.getElementById('preview-button').addEventListener('click', async () => {
-        const form = document.getElementById('email-template-form');
-        syncEmailBody();
-        const panel = document.getElementById('preview-panel');
-        const error = document.getElementById('preview-error');
-        error.textContent = '';
-        panel.classList.remove('d-none');
-        try {
-            const response = await fetch(@json(route('admin.email-templates.preview')), {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json', 'X-CSRF-TOKEN': form.querySelector('[name=_token]').value, 'Accept': 'application/json'},
-                body: JSON.stringify({name: form.elements.name.value, subject: form.elements.subject.value, body: form.elements.body.value})
-            });
-            const result = await response.json();
-            if (!response.ok) throw new Error(Object.values(result.errors || {}).flat().join(' ' ) || 'Pratinjau gagal dibuat.');
-            document.getElementById('preview-subject').textContent = `Subjek: ${result.subject}`;
-            document.getElementById('preview-body').srcdoc = `<!doctype html><html><body style="font-family:Arial,sans-serif;line-height:1.6">${result.body}</body></html>`;
-        } catch (exception) {
-            error.textContent = exception.message;
-        }
-    });
-
-    document.getElementById('email-template-form').addEventListener('submit', syncEmailBody);
-</script>
+@push('scripts')
+    <script src="{{ asset('js/pages/admin/email-templates/edit.js') }}"></script>
+@endpush
 @endsection

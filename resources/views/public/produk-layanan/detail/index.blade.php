@@ -1,4 +1,7 @@
 @extends('layouts.app')
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('css/pages/public/produk-layanan/detail/index.css') }}">
+@endpush
 
 @section('title', ($detail?->hero_title ?: $category->name) . ' - CV Arindah')
 
@@ -197,8 +200,8 @@
                                 <div class="flex h-9 w-9 items-center justify-center rounded-[10px] bg-[#E6F1FF] text-[#0969D8]">
 
                                     <i
-                                        class="{{ $highlight['icon'] }}"
-                                        style="font-size: 1.125rem;"
+                                        class="{{ $highlight['icon'] }} blade-static-style-1"
+
                                         aria-hidden="true"
                                     ></i>
 
@@ -281,8 +284,8 @@
                         <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-[14px] bg-[#E7F1FF] text-[#0969D8] transition duration-300 group-hover:scale-110 group-hover:bg-[#0969D8] group-hover:text-white">
 
                             <i
-                                class="{{ $advantage['icon'] }}"
-                                style="font-size: 1.25rem;"
+                                class="{{ $advantage['icon'] }} blade-static-style-2"
+
                                 aria-hidden="true"
                             ></i>
 
